@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllCamps, getCampBySlug } from '@/lib/camps';
@@ -26,6 +27,20 @@ export default async function CampDetailPage({
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">{camp.location}</p>
           <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">{camp.title}</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">{camp.subtitle}</p>
+
+          <div className="mt-10 overflow-hidden rounded-[2rem] border border-white/10 bg-white/5">
+            <div className="relative aspect-[16/10]">
+              <Image
+                src={camp.coverImage}
+                alt={camp.coverImageAlt}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 65vw"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/20 to-transparent" />
+            </div>
+          </div>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
@@ -65,7 +80,29 @@ export default async function CampDetailPage({
             </div>
           </div>
 
-          <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="mt-10">
+            <div className="mb-6 max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Impressions</p>
+              <h2 className="mt-2 text-2xl font-semibold text-white">So sieht das Wochenende vor Ort aus</h2>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {camp.gallery.map((image, index) => (
+                <div key={image.src} className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5">
+                  <div className={`relative ${index === 0 ? 'aspect-[4/5] md:aspect-[4/5]' : 'aspect-[4/5]'}`}>
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 30vw"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-6">
             <h2 className="text-xl font-semibold text-white">Ablauf</h2>
             <div className="mt-6 space-y-5">
               {camp.schedule.map((item) => (
@@ -83,7 +120,7 @@ export default async function CampDetailPage({
           </div>
         </div>
 
-        <aside className="h-fit rounded-[2rem] border border-white/10 bg-white/5 p-6">
+        <aside className="h-fit rounded-[2rem] border border-white/10 bg-white/5 p-6 lg:sticky lg:top-24">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Buchung</p>
           <p className="mt-4 text-3xl font-semibold text-white">{formatCurrency(camp.priceCents)}</p>
           <p className="mt-2 text-sm text-slate-300">pro Person für das General Camp</p>
@@ -94,7 +131,7 @@ export default async function CampDetailPage({
             <p>• Übernachtung in der Halle inklusive</p>
             <p>• Privates am Sonntag separat</p>
           </div>
-          <p className="mt-6 rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-4 text-xs leading-6 text-slate-300">
+          <p className="mt-6 rounded-2xl border border-white/10 bg-slate-950/40 p-4 text-xs leading-6 text-slate-300">
             {camp.privatePaymentNote}
           </p>
           <Link

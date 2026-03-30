@@ -1,13 +1,23 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { siteConfig } from '@/data/site-config';
+import { brandMedia } from '@/data/media';
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/10 bg-slate-950">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 text-sm text-slate-300 lg:grid-cols-3 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 text-sm text-slate-300 lg:grid-cols-[1.2fr_0.9fr_0.9fr] lg:px-8">
         <div>
-          <p className="text-base font-semibold text-white">{siteConfig.name}</p>
-          <p className="mt-3 max-w-sm leading-6">{siteConfig.description}</p>
+          <div className="inline-flex rounded-3xl border border-white/10 bg-white/5 p-3">
+            <Image
+              src={brandMedia.logoPrimary.src}
+              alt={brandMedia.logoPrimary.alt}
+              width={176}
+              height={117}
+              className="h-auto w-36"
+            />
+          </div>
+          <p className="mt-4 max-w-sm leading-6">{siteConfig.description}</p>
         </div>
 
         <div>

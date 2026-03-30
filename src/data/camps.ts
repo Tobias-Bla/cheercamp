@@ -8,6 +8,11 @@ export type PrivateOption =
   | 'INDIVIDUAL_60'
   | 'INDIVIDUAL_90';
 
+export type CampGalleryImage = {
+  src: string;
+  alt: string;
+};
+
 export type Camp = {
   slug: string;
   title: string;
@@ -28,6 +33,11 @@ export type Camp = {
   overnightIncluded: boolean;
   privateAvailable: boolean;
   privatePaymentNote: string;
+  coverImage: string;
+  coverImageAlt: string;
+  bookingImage: string;
+  bookingImageAlt: string;
+  gallery: CampGalleryImage[];
   privateOptions: Array<{
     label: string;
     value: PrivateOption;
@@ -65,6 +75,24 @@ export const camps: Camp[] = [
     privateAvailable: true,
     privatePaymentNote:
       'Privates am Sonntag werden separat angefragt und direkt in bar an den Coach gezahlt.',
+    coverImage: '/images/team-lineup.webp',
+    coverImageAlt: 'Mehrere Partnerstunts stehen in einer Reihe auf der Matte beim Rise Camp.',
+    bookingImage: '/images/stunt-line.webp',
+    bookingImageAlt: 'Mehrere Stuntgruppen stehen gleichzeitig auf der Matte.',
+    gallery: [
+      {
+        src: '/images/team-lineup.webp',
+        alt: 'Mehrere Partnerstunts stehen in einer Reihe auf der Matte beim Rise Camp.',
+      },
+      {
+        src: '/images/community-dinner.webp',
+        alt: 'Die Teilnehmenden sitzen nach dem Training gemeinsam an einer langen Tafel.',
+      },
+      {
+        src: '/images/coach-kai-action.webp',
+        alt: 'Coach Kai gibt beim Training direktes Technik-Feedback an einer Stuntgruppe.',
+      },
+    ],
     privateOptions: [
       { label: 'Kein Private-Interesse', value: 'NONE' },
       { label: 'Pair Private · 60 Minuten', value: 'PAIR_60' },
@@ -125,6 +153,24 @@ export const camps: Camp[] = [
     privateAvailable: true,
     privatePaymentNote:
       'Privates am Sonntag sind optional, werden separat koordiniert und direkt bar an den Coach gezahlt.',
+    coverImage: '/images/hero-group-photo.webp',
+    coverImageAlt: 'Großes Gruppenfoto der Camp-Community in der Albtalhalle.',
+    bookingImage: '/images/coach-kai-action.webp',
+    bookingImageAlt: 'Coach Kai korrigiert bei einem Stunt die Körperlinie der Athletin.',
+    gallery: [
+      {
+        src: '/images/hero-group-photo.webp',
+        alt: 'Großes Gruppenfoto der Camp-Community in der Albtalhalle.',
+      },
+      {
+        src: '/images/coach-kai-dog.webp',
+        alt: 'Coach Kai sitzt entspannt mit einem kleinen Hund in der Halle.',
+      },
+      {
+        src: '/images/stunt-line.webp',
+        alt: 'Mehrere Stuntgruppen trainieren gleichzeitig und sauber nebeneinander.',
+      },
+    ],
     privateOptions: [
       { label: 'Kein Private-Interesse', value: 'NONE' },
       { label: 'Pair Private · 60 Minuten', value: 'PAIR_60' },

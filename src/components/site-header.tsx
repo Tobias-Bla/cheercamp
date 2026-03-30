@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { siteConfig } from '@/data/site-config';
+import { brandMedia } from '@/data/media';
 
 const navigationItems = [
   { href: '/', label: 'Start' },
@@ -11,12 +13,19 @@ const navigationItems = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 lg:px-8">
         <Link href="/" className="flex items-center gap-3 text-white transition hover:opacity-90">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-linear-to-br from-fuchsia-500 to-cyan-400 text-base font-black text-slate-950">
-            SC
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-2">
+            <Image
+              src={brandMedia.logoPrimary.src}
+              alt={brandMedia.logoPrimary.alt}
+              width={112}
+              height={75}
+              className="h-auto w-20"
+              priority
+            />
           </div>
-          <div>
+          <div className="hidden sm:block">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-fuchsia-300">{siteConfig.name}</p>
             <p className="text-xs text-slate-300">Partnerstunt & Groupstunt Weekends</p>
           </div>
