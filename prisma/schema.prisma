@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+enum TShirtSize {
+  YXS
+  YS
+  YM
+  YL
+  XS
+  S
+  M
+  L
+  XL
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum StuntFormat {
+  PARTNER_STUNT
+  GROUP_STUNT
+}
+
+enum PrivateInterest {
+  NONE
+  PAIR_60
+  PAIR_90
+  GROUP_60
+  GROUP_90
+  INDIVIDUAL_60
+  INDIVIDUAL_90
+}
+
+model Booking {
+  id                      String           @id @default(cuid())
+  status                  BookingStatus    @default(PENDING)
+  campSlug                String           @map("camp_slug")
+  campTitle               String           @map("camp_title")
+  campLocation            String           @map("camp_location")
+  campStartDate           DateTime         @map("camp_start_date")
+  campEndDate             DateTime         @map("camp_end_date")
+  participantFirstName    String           @map("participant_first_name")
+  participantLastName     String           @map("participant_last_name")
+  participantBirthDate    DateTime         @map("participant_birth_date")
+  guardianName            String           @map("guardian_name")
+  guardianEmail           String           @map("guardian_email")
+  guardianPhone           String           @map("guardian_phone")
+  emergencyContactName    String           @map("emergency_contact_name")
+  emergencyContactPhone   String           @map("emergency_contact_phone")
+  experienceLevel         ExperienceLevel  @map("experience_level")
+  stuntFormat             StuntFormat      @map("stunt_format")
+  teamName                String?          @map("team_name")
+  stuntPartnerOrGroup     String?          @map("stunt_partner_or_group")
+  saturdayWish            String?          @map("saturday_wish") @db.Text
+  privateInterest         PrivateInterest  @default(NONE) @map("private_interest")
+  tshirtSize              TShirtSize       @map("tshirt_size")
+  allergies               String?          @db.Text
+  notes                   String?          @db.Text
+  photoConsent            Boolean          @default(false) @map("photo_consent")
+  acceptedTerms           Boolean          @default(false) @map("accepted_terms")
+  stripeCheckoutSessionId String?          @unique @map("stripe_checkout_session_id")
+  stripePaymentIntentId   String?          @map("stripe_payment_intent_id")
+  amountCents             Int              @map("amount_cents")
+  currency                String           @default("EUR")
+  paidAt                  DateTime?        @map("paid_at")
+  createdAt               DateTime         @default(now()) @map("created_at")
+  updatedAt               DateTime         @updatedAt @map("updated_at")
+
+  @@index([campSlug, createdAt])
+  @@index([guardianEmail])
+  @@index([status])
+  @@map("bookings")
+}
