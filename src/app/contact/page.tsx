@@ -1,4 +1,4 @@
-import { siteConfig } from '@/data/site-config';
+﻿import { siteConfig } from '@/data/site-config';
 
 export default function ContactPage() {
   return (
@@ -8,7 +8,8 @@ export default function ContactPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Kontakt</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">Fragen zum Camp, zur Buchung oder zu Privates?</h1>
           <p className="mt-4 text-base leading-7 text-slate-300">
-            Die Website ist bereits auf wiederkehrende Camps im Jahr ausgelegt. Über die Kontaktseite können später auch konkrete Private-Anfragen, Coach-Infos und Merch-Themen ergänzt werden.
+            Die Website ist bereits auf wiederkehrende Camps im Jahr ausgelegt. Über die Kontaktseite können später
+            auch konkrete Private-Anfragen, Coach-Infos und Merch-Themen ergänzt werden.
           </p>
         </div>
 

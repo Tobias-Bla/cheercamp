@@ -1,4 +1,4 @@
-const faqItems = [
+﻿const faqItems = [
   {
     question: 'Was ist im Preis enthalten?',
     answer:

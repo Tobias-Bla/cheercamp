@@ -1,4 +1,4 @@
-export type StuntFormat = 'PARTNER_STUNT' | 'GROUP_STUNT';
+﻿export type StuntFormat = 'PARTNER_STUNT' | 'GROUP_STUNT';
 export type PrivateOption =
   | 'NONE'
   | 'PAIR_60'
@@ -67,7 +67,7 @@ export const camps: Camp[] = [
     capacityText: '35 Plätze',
     ages: 'Jugendliche & Erwachsene',
     level: 'Open Level – mit Fokus auf sichere Basics bis Advanced Input',
-    coaches: ['Kai', 'Camp-Team'],
+    coaches: ['Kai', 'Vio'],
     coachModeLabel: 'Ohne externen Coach',
     formatOptions: ['Partnerstunt', 'Groupstunt'],
     generalCampTime: 'Samstag, 12:00–18:00 Uhr',
@@ -106,7 +106,7 @@ export const camps: Camp[] = [
     highlights: [
       'Spezialpreis von 40 € pro Person',
       'Übernachtung in der Halle inklusive',
-      'Coachings durch Kai und das Camp-Team',
+      'Coachings durch Kai und Vio',
       'Privates am Sonntag zusätzlich möglich',
     ],
     schedule: [
@@ -145,7 +145,7 @@ export const camps: Camp[] = [
     capacityText: '35 Plätze',
     ages: 'Jugendliche & Erwachsene',
     level: 'Open Level – für eingespielte Stuntgroups und motivierte Athlet*innen',
-    coaches: ['Externer Guest Coach', 'Kai', 'Camp-Team'],
+    coaches: ['Externer Guest Coach', 'Kai', 'Vio'],
     coachModeLabel: 'Mit externem Coach',
     formatOptions: ['Partnerstunt', 'Groupstunt'],
     generalCampTime: 'Samstag, 12:00–18:00 Uhr',

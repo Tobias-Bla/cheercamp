@@ -1,4 +1,4 @@
-export const siteConfig = {
+﻿export const siteConfig = {
   name: 'RISE Stunt Camp',
   claim: 'Partnerstunt-Camps mit Weekend-Vibe, klarer Orga und starker Coaching-Energie.',
   description:
