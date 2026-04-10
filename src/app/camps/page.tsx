@@ -1,7 +1,6 @@
-import Image from 'next/image';
+﻿import Image from 'next/image';
 import { CampCard } from '@/components/camp-card';
 import { getAllCamps } from '@/lib/camps';
-import { brandMedia } from '@/data/media';
 
 export default function CampsPage() {
   const availableCamps = getAllCamps();
@@ -33,15 +32,6 @@ export default function CampsPage() {
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
             <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/10 to-transparent" />
-          </div>
-          <div className="absolute bottom-4 right-4 rounded-3xl border border-white/10 bg-slate-950/70 p-3 backdrop-blur">
-            <Image
-              src={brandMedia.logoPrimary.src}
-              alt={brandMedia.logoPrimary.alt}
-              width={160}
-              height={106}
-              className="h-auto w-32"
-            />
           </div>
         </div>
       </div>
