@@ -35,7 +35,7 @@ export default function HomePage() {
           <h1 className="mt-8 max-w-3xl text-5xl font-black tracking-tight text-white sm:text-6xl">
             R.I.S.E. Camp
           </h1>
-          <div className="mt-5 grid max-w-xl gap-2 text-base font-medium text-cyan-200 sm:grid-cols-2">
+          <div className="mt-5 grid max-w-2xl grid-cols-2 gap-2 text-base font-medium text-cyan-200 sm:grid-cols-4">
             <span>Respect</span>
             <span>Inspire</span>
             <span>Stunt</span>
