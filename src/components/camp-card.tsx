@@ -29,7 +29,7 @@ export function CampCard({ camp }: { camp: Camp }) {
         <dl className="grid gap-4 text-sm text-slate-300 sm:grid-cols-2">
           <div>
             <dt className="text-slate-400">Termin</dt>
-            <dd className="mt-1 font-medium text-white">{formatDateRange(camp.startDate, camp.endDate)}</dd>
+            <dd className="mt-1 font-medium text-white">{camp.dateLabel ?? formatDateRange(camp.startDate!, camp.endDate!)}</dd>
           </div>
           <div>
             <dt className="text-slate-400">Preis</dt>
@@ -60,12 +60,18 @@ export function CampCard({ camp }: { camp: Camp }) {
           >
             Details ansehen
           </Link>
-          <Link
-            href={`/book/${camp.slug}`}
-            className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-fuchsia-300 hover:text-fuchsia-200"
-          >
-            Direkt buchen
-          </Link>
+          {camp.bookingOpen ? (
+            <Link
+              href={`/book/${camp.slug}`}
+              className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:border-fuchsia-300 hover:text-fuchsia-200"
+            >
+              Direkt buchen
+            </Link>
+          ) : (
+            <span className="rounded-full border border-amber-300/25 bg-amber-300/10 px-4 py-2 text-sm font-semibold text-amber-100">
+              Buchung folgt nach Terminankuendigung
+            </span>
+          )}
         </div>
       </div>
     </article>

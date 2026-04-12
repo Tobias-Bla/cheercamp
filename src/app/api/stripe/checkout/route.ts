@@ -15,6 +15,10 @@ export async function POST(request: Request): Promise<Response> {
       return NextResponse.json({ error: 'Das ausgewählte Camp existiert nicht.' }, { status: 404 });
     }
 
+    if (!camp.bookingOpen) {
+      return NextResponse.json({ error: 'Dieses Camp ist noch nicht zur Buchung freigegeben.' }, { status: 400 });
+    }
+
     const prisma = getPrismaClient();
     const requestUrl = new URL(request.url);
     const baseUrl = requestUrl.origin === 'null' ? process.env.NEXT_PUBLIC_SITE_URL ?? '' : requestUrl.origin;
@@ -30,23 +34,23 @@ export async function POST(request: Request): Promise<Response> {
         campSlug: camp.slug,
         campTitle: camp.title,
         campLocation: camp.location,
-        campStartDate: new Date(camp.startDate),
-        campEndDate: new Date(camp.endDate),
+        campStartDate: camp.startDate ? new Date(camp.startDate) : null,
+        campEndDate: camp.endDate ? new Date(camp.endDate) : null,
         participantFirstName: payload.participantFirstName,
         participantLastName: payload.participantLastName,
         participantBirthDate: new Date(payload.participantBirthDate),
-        guardianName: payload.guardianName,
-        guardianEmail: payload.guardianEmail,
-        guardianPhone: payload.guardianPhone,
+        contactName: payload.contactName,
+        contactEmail: payload.contactEmail,
+        contactPhone: payload.contactPhone,
         emergencyContactName: payload.emergencyContactName,
         emergencyContactPhone: payload.emergencyContactPhone,
         experienceLevel: payload.experienceLevel,
         stuntFormat: payload.stuntFormat,
         teamName: payload.teamName || null,
         stuntPartnerOrGroup: payload.stuntPartnerOrGroup || null,
+        participantMobile: payload.participantMobile,
         saturdayWish: payload.saturdayWish || null,
         privateInterest: payload.privateInterest,
-        tshirtSize: payload.tshirtSize,
         allergies: payload.allergies || null,
         notes: payload.notes || null,
         photoConsent: payload.photoConsent,
@@ -61,7 +65,7 @@ export async function POST(request: Request): Promise<Response> {
       billing_address_collection: 'auto',
       success_url: `${baseUrl}/checkout/success?bookingId=${booking.id}`,
       cancel_url: `${baseUrl}/checkout/cancel?bookingId=${booking.id}`,
-      customer_email: payload.guardianEmail,
+      customer_email: payload.contactEmail,
       metadata: {
         bookingId: booking.id,
         campSlug: camp.slug,
@@ -76,7 +80,7 @@ export async function POST(request: Request): Promise<Response> {
             unit_amount: camp.priceCents,
             product_data: {
               name: camp.title,
-              description: `${camp.venue} · General Camp · ${camp.startDate} bis ${camp.endDate}`,
+              description: `${camp.venue} · General Camp`,
             },
           },
         },

@@ -49,7 +49,7 @@ export default async function AdminBookingsPage() {
                   <p className="text-lg font-semibold text-white">
                     {booking.participantFirstName} {booking.participantLastName}
                   </p>
-                  <p className="mt-1 text-sm text-slate-400">{booking.guardianEmail}</p>
+                  <p className="mt-1 text-sm text-slate-400">{booking.contactEmail}</p>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <span className="rounded-full border border-white/10 px-3 py-1 text-xs">{booking.status}</span>
@@ -77,9 +77,9 @@ export default async function AdminBookingsPage() {
                   <p className="mt-1 text-slate-400">{booking.stuntPartnerOrGroup ?? 'Keine Angabe'}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Private-Interesse</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Kontakt & Private</p>
                   <p className="mt-2 font-medium text-white">{booking.privateInterest}</p>
-                  <p className="mt-1 text-slate-400">T-Shirt: {booking.tshirtSize}</p>
+                  <p className="mt-1 text-slate-400">Handy: {booking.participantMobile}</p>
                 </div>
               </div>
 

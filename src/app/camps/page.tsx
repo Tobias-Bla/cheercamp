@@ -10,7 +10,7 @@ export default function CampsPage() {
       <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Camp Übersicht</p>
-          <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">Alle buchbaren Stunt-Camps auf einen Blick</h1>
+          <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">Alle R.I.S.E. Camps auf einen Blick</h1>
           <p className="mt-4 text-lg leading-8 text-slate-300">
             Alle Camps finden in der Albtalhalle in St. Blasien statt, haben 35 Plätze und sind auf wiederkehrende Termine im Jahr ausgelegt.
           </p>

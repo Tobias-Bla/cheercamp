@@ -19,8 +19,9 @@ export type Camp = {
   subtitle: string;
   location: string;
   venue: string;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
+  dateLabel?: string;
   priceCents: number;
   capacity: number;
   capacityText: string;
@@ -50,18 +51,20 @@ export type Camp = {
     details: string[];
   }>;
   featured: boolean;
+  bookingOpen: boolean;
 };
 
 export const camps: Camp[] = [
   {
     slug: 'spring-stunt-camp-2026',
-    title: 'Spring Stunt Camp 2026',
+    title: 'R.I.S.E. Camp - Special Edition',
     subtitle:
-      'Das nächste Cheercamp in St. Blasien mit Partnerstunt-Fokus, Groupstunts willkommen und Special Price.',
+      'Das naechste Cheercamp in St. Blasien mit Kai und Vio zum Specialpreis - Partnerstunt im Fokus, Groupstunts willkommen.',
     location: 'St. Blasien',
     venue: 'Albtalhalle, St. Blasien',
-    startDate: '2026-05-16',
-    endDate: '2026-05-17',
+    startDate: null,
+    endDate: null,
+    dateLabel: 'Termin folgt',
     priceCents: 4000,
     capacity: 35,
     capacityText: '35 Plätze',
@@ -70,7 +73,7 @@ export const camps: Camp[] = [
     coaches: ['Kai', 'Vio'],
     coachModeLabel: 'Ohne externen Coach',
     formatOptions: ['Partnerstunt', 'Groupstunt'],
-    generalCampTime: 'Samstag, 12:00–18:00 Uhr',
+    generalCampTime: 'Freitag optionale Anreise ab 15:00 Uhr, Samstag 12:00-18:00 Uhr',
     overnightIncluded: true,
     privateAvailable: true,
     privatePaymentNote:
@@ -95,12 +98,12 @@ export const camps: Camp[] = [
     ],
     privateOptions: [
       { label: 'Kein Private-Interesse', value: 'NONE' },
-      { label: 'Pair Private · 60 Minuten', value: 'PAIR_60' },
-      { label: 'Pair Private · 90 Minuten', value: 'PAIR_90' },
-      { label: 'Groupstunt Private · 60 Minuten', value: 'GROUP_60' },
-      { label: 'Groupstunt Private · 90 Minuten', value: 'GROUP_90' },
-      { label: 'Einzelperson Session · 60 Minuten', value: 'INDIVIDUAL_60' },
-      { label: 'Einzelperson Session · 90 Minuten', value: 'INDIVIDUAL_90' },
+      { label: '1 on 1 · 60 Minuten mit Kai · 40 EUR', value: 'INDIVIDUAL_60' },
+      { label: '1 on 1 · 60 Minuten mit Vio · 40 EUR', value: 'PAIR_60' },
+      { label: '2 on 1 · 60 Minuten mit Kai und Vio · 60 EUR', value: 'GROUP_60' },
+      { label: '2 on 1 · 90 Minuten mit Kai und Vio · 80 EUR', value: 'GROUP_90' },
+      { label: 'Pairs in Partnerstunts · nach Absprache', value: 'PAIR_90' },
+      { label: 'Groupstunt · nach Absprache', value: 'INDIVIDUAL_90' },
     ],
     focus: ['Partnerstunt', 'Groupstunt', 'Technique Fixes', 'Safe Progressions'],
     highlights: [
@@ -111,25 +114,35 @@ export const camps: Camp[] = [
     ],
     schedule: [
       {
+        day: 'Freitag',
+        title: 'Optionale Anreise ab 15:00 Uhr',
+        details: [
+          'Wer mag, kann bereits am Freitag in Ruhe anreisen und sich vor Ort einrichten.',
+          'Die Uebernachtung in der Halle ist inklusive.',
+        ],
+      },
+      {
         day: 'Samstag',
         title: 'General Camp · 12:00–18:00 Uhr',
         details: [
           'Allgemeines Camp mit Fokus auf Partnerstunt; Groupstunts sind ausdrücklich willkommen.',
           'Teilnehmer können vorab Wünsche für bestimmte Stunts oder Themen angeben.',
           'Das Camp richtet sich nach den häufigsten Wünschen und dem, was vor Ort am meisten Sinn ergibt.',
+          'Verpflegung ist nicht im Preis enthalten.',
         ],
       },
       {
         day: 'Sonntag',
         title: 'Privates nach Absprache',
         details: [
-          'Pairs oder Groupstunts können exklusive 60- oder 90-Minuten-Slots anfragen.',
-          'Je nach Coach-Setup sind auch Einzel-Sessions mit direktem Stunten mit dem Coach möglich.',
+          'Pairs in Partnerstunts oder Groupstunts koennen exklusive 60- oder 90-Minuten-Slots anfragen.',
+          'Es sind Einzel-Sessions mit direktem Stunten mit dem Coach moeglich.',
           'Privates sind nicht im Online-Preis enthalten und werden bar direkt an den Coach gezahlt.',
         ],
       },
     ],
     featured: true,
+    bookingOpen: false,
   },
   {
     slug: 'autumn-stunt-camp-2026',
@@ -173,12 +186,12 @@ export const camps: Camp[] = [
     ],
     privateOptions: [
       { label: 'Kein Private-Interesse', value: 'NONE' },
-      { label: 'Pair Private · 60 Minuten', value: 'PAIR_60' },
-      { label: 'Pair Private · 90 Minuten', value: 'PAIR_90' },
-      { label: 'Groupstunt Private · 60 Minuten', value: 'GROUP_60' },
-      { label: 'Groupstunt Private · 90 Minuten', value: 'GROUP_90' },
-      { label: 'Einzelperson Session · 60 Minuten', value: 'INDIVIDUAL_60' },
-      { label: 'Einzelperson Session · 90 Minuten', value: 'INDIVIDUAL_90' },
+      { label: '1 on 1 · 60 Minuten mit Kai · 40 EUR', value: 'INDIVIDUAL_60' },
+      { label: '1 on 1 · 60 Minuten mit Vio · 40 EUR', value: 'PAIR_60' },
+      { label: '2 on 1 · 60 Minuten mit Kai und Vio · 60 EUR', value: 'GROUP_60' },
+      { label: '2 on 1 · 90 Minuten mit Kai und Vio · 80 EUR', value: 'GROUP_90' },
+      { label: 'Pairs in Partnerstunts · nach Absprache', value: 'PAIR_90' },
+      { label: 'Groupstunt · nach Absprache', value: 'INDIVIDUAL_90' },
     ],
     focus: ['Partnerstunt', 'Groupstunt', 'Wish-Based Coaching', 'Coach Feedback'],
     highlights: [
@@ -189,24 +202,34 @@ export const camps: Camp[] = [
     ],
     schedule: [
       {
+        day: 'Freitag',
+        title: 'Optionale Anreise ab 15:00 Uhr',
+        details: [
+          'Die optionale Anreise ist ab 15:00 Uhr moeglich.',
+          'Die Uebernachtung in der Halle ist inklusive.',
+        ],
+      },
+      {
         day: 'Samstag',
         title: 'General Camp · 12:00–18:00 Uhr',
         details: [
           'Der externe Coach coacht das allgemeine Camp und setzt je nach Stil einen genauen Zeitplan oder ein freieres Format um.',
           'Teilnehmerwünsche für Stunts oder Technikthemen werden gesammelt und priorisiert.',
           'Die beliebtesten Themen werden gemeinsam mit dem Coach aufgegriffen.',
+          'Verpflegung ist nicht im Preis enthalten.',
         ],
       },
       {
         day: 'Sonntag',
         title: 'Privates nach Absprache',
         details: [
-          'Exklusive Private-Slots für Pairs oder Groupstunts sind möglich.',
-          'Je nach Coach können auch Einzel-Sessions angeboten werden.',
+          'Pairs in Partnerstunts oder Groupstunts koennen exklusive Private-Slots anfragen.',
+          'Es sind Einzel-Sessions mit direktem Stunten mit dem Coach moeglich.',
           'Bezahlung der Privates erfolgt separat und bar direkt an den Coach.',
         ],
       },
     ],
     featured: true,
+    bookingOpen: true,
   },
 ];

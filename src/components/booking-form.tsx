@@ -28,18 +28,18 @@ export function BookingForm({ camp }: { camp: Camp }) {
       participantFirstName: String(formData.get('participantFirstName') ?? ''),
       participantLastName: String(formData.get('participantLastName') ?? ''),
       participantBirthDate: String(formData.get('participantBirthDate') ?? ''),
-      guardianName: String(formData.get('guardianName') ?? ''),
-      guardianEmail: String(formData.get('guardianEmail') ?? ''),
-      guardianPhone: String(formData.get('guardianPhone') ?? ''),
+      contactName: String(formData.get('contactName') ?? ''),
+      contactEmail: String(formData.get('contactEmail') ?? ''),
+      contactPhone: String(formData.get('contactPhone') ?? ''),
       emergencyContactName: String(formData.get('emergencyContactName') ?? ''),
       emergencyContactPhone: String(formData.get('emergencyContactPhone') ?? ''),
       experienceLevel: String(formData.get('experienceLevel') ?? ''),
       stuntFormat: String(formData.get('stuntFormat') ?? ''),
       teamName: String(formData.get('teamName') ?? ''),
       stuntPartnerOrGroup: String(formData.get('stuntPartnerOrGroup') ?? ''),
+      participantMobile: String(formData.get('participantMobile') ?? ''),
       saturdayWish: String(formData.get('saturdayWish') ?? ''),
       privateInterest: String(formData.get('privateInterest') ?? 'NONE'),
-      tshirtSize: String(formData.get('tshirtSize') ?? ''),
       allergies: String(formData.get('allergies') ?? ''),
       notes: String(formData.get('notes') ?? ''),
       photoConsent: getBooleanValue(formData, 'photoConsent'),
@@ -125,51 +125,44 @@ export function BookingForm({ camp }: { camp: Camp }) {
         </div>
         <div className="sm:col-span-2">
           <label htmlFor="stuntPartnerOrGroup" className="mb-2 block text-sm font-medium text-slate-200">
-            Partner*in oder Group-Mitglieder
+            Partner*in oder weitere Group-Mitglieder (optional)
           </label>
           <input
             id="stuntPartnerOrGroup"
             name="stuntPartnerOrGroup"
             className="field"
-            placeholder="z. B. Lisa Müller / Group: Anna, Bea, Chris"
+            placeholder="Optional, nur als Info fuer die Orga. Jede Person bucht trotzdem einzeln."
           />
+          <p className="mt-2 text-xs leading-6 text-slate-400">
+            Dieser Eintrag ist nur zusaetzliche Orga-Info und ersetzt keine einzelnen Buchungen.
+          </p>
         </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="guardianName" className="mb-2 block text-sm font-medium text-slate-200">
+          <label htmlFor="contactName" className="mb-2 block text-sm font-medium text-slate-200">
             Name Kontaktperson
           </label>
-          <input id="guardianName" name="guardianName" required className="field" />
+          <input id="contactName" name="contactName" required className="field" />
         </div>
         <div>
-          <label htmlFor="guardianEmail" className="mb-2 block text-sm font-medium text-slate-200">
+          <label htmlFor="contactEmail" className="mb-2 block text-sm font-medium text-slate-200">
             E-Mail
           </label>
-          <input id="guardianEmail" name="guardianEmail" type="email" required className="field" />
+          <input id="contactEmail" name="contactEmail" type="email" required className="field" />
         </div>
         <div>
-          <label htmlFor="guardianPhone" className="mb-2 block text-sm font-medium text-slate-200">
+          <label htmlFor="contactPhone" className="mb-2 block text-sm font-medium text-slate-200">
             Telefonnummer
           </label>
-          <input id="guardianPhone" name="guardianPhone" required className="field" />
+          <input id="contactPhone" name="contactPhone" required className="field" />
         </div>
         <div>
-          <label htmlFor="tshirtSize" className="mb-2 block text-sm font-medium text-slate-200">
-            T-Shirt-Größe
+          <label htmlFor="participantMobile" className="mb-2 block text-sm font-medium text-slate-200">
+            Handynummer Teilnehmer*in
           </label>
-          <select id="tshirtSize" name="tshirtSize" required className="field" defaultValue="M">
-            <option value="YXS">YXS</option>
-            <option value="YS">YS</option>
-            <option value="YM">YM</option>
-            <option value="YL">YL</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-          </select>
+          <input id="participantMobile" name="participantMobile" required className="field" />
         </div>
       </div>
 

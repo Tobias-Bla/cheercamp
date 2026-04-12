@@ -13,6 +13,7 @@ const benefits = [
 ];
 
 const flowItems = [
+  'Freitag: optionale Anreise ab 15:00 Uhr',
   'Samstag: General Camp von 12:00 bis 18:00 Uhr',
   'Wünsche für bestimmte Stunts oder Themen können vorab angegeben werden',
   'Die beliebtesten Inhalte fließen direkt ins Coaching ein',
@@ -32,8 +33,14 @@ export default function HomePage() {
             Stunt-Weekend in der Albtalhalle St. Blasien
           </p>
           <h1 className="mt-8 max-w-3xl text-5xl font-black tracking-tight text-white sm:text-6xl">
-            Partnerstunt-Camps mit echter Camp-Atmosphäre statt nur trockener Orga.
+            R.I.S.E. Camp
           </h1>
+          <div className="mt-5 grid max-w-xl gap-2 text-base font-medium text-cyan-200 sm:grid-cols-2">
+            <span>Respect</span>
+            <span>Inspire</span>
+            <span>Stunt</span>
+            <span>Elevate</span>
+          </div>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
             {siteConfig.claim} Die Seite bündelt Buchung, Zahlung und alle wichtigen Infos – und zeigt direkt, wie sich
             ein Wochenende bei RISE anfühlt.
@@ -66,8 +73,8 @@ export default function HomePage() {
           <div className="mt-8 max-w-xl rounded-[1.75rem] border border-white/15 bg-white/10 p-5 shadow-[0_22px_60px_-38px_rgba(255,255,255,0.35)] backdrop-blur">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Warum das sofort funktioniert</p>
             <p className="mt-3 text-sm leading-7 text-slate-100">
-              Buchung, Camp-Wünsche und Zahlungsstart liegen direkt an einem Ort. Für Eltern und Athletinnen ist der
-              Einstieg dadurch deutlich klarer als per DM, Formular-Pingpong oder einzelner Umfrage.
+              Buchung, Camp-Wuensche und Zahlungsstart liegen direkt an einem Ort. Fuer Teilnehmende ist der Einstieg
+              dadurch deutlich klarer als per DM, Formular-Pingpong oder einzelner Umfrage.
             </p>
           </div>
         </div>
@@ -87,9 +94,7 @@ export default function HomePage() {
             </div>
             <div className="absolute left-5 top-5 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 backdrop-blur">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Real Camp Impressions</p>
-              <p className="mt-2 max-w-[14rem] text-sm text-slate-200">
-                Kein Stock-Material – echte Bilder aus euren bisherigen Weekends.
-              </p>
+              <p className="mt-2 max-w-[14rem] text-sm text-slate-200">Echte Eindruecke aus euren bisherigen Weekends.</p>
             </div>
           </div>
 
@@ -106,9 +111,13 @@ export default function HomePage() {
             <h2 className="mt-4 text-[2.15rem] font-semibold leading-tight text-white">{primaryCamp?.title}</h2>
             <p className="mt-3 text-base leading-7 text-slate-200">{primaryCamp?.subtitle}</p>
             <div className="mt-6 rounded-2xl border border-white/12 bg-white/10 p-4">
-              <p className="text-sm font-medium text-white">Direkt online buchbar</p>
+              <p className="text-sm font-medium text-white">
+                {primaryCamp?.bookingOpen ? 'Direkt online buchbar' : 'Buchung startet, sobald das Datum feststeht'}
+              </p>
               <p className="mt-2 text-sm leading-6 text-slate-200">
-                General Camp online reservieren und bezahlen. Privates am Sonntag bleiben flexibel als Zusatzanfrage.
+                {primaryCamp?.bookingOpen
+                  ? 'General Camp online reservieren und bezahlen. Privates am Sonntag bleiben flexibel als Zusatzanfrage.'
+                  : 'Das naechste Cheercamp in St. Blasien mit Kai und Vio zum Specialpreis wird erst nach finaler Terminankuendigung freigeschaltet.'}
               </p>
             </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -119,12 +128,18 @@ export default function HomePage() {
               ))}
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href={primaryCamp ? `/book/${primaryCamp.slug}` : '/camps'}
-                className="inline-flex items-center justify-center rounded-full bg-linear-to-r from-fuchsia-500 via-pink-400 to-cyan-400 px-7 py-4 text-sm font-semibold text-slate-950 shadow-[0_24px_45px_-24px_rgba(34,211,238,0.65)] transition hover:brightness-105"
-              >
-                Jetzt direkt buchen
-              </Link>
+              {primaryCamp?.bookingOpen ? (
+                <Link
+                  href={primaryCamp ? `/book/${primaryCamp.slug}` : '/camps'}
+                  className="inline-flex items-center justify-center rounded-full bg-linear-to-r from-fuchsia-500 via-pink-400 to-cyan-400 px-7 py-4 text-sm font-semibold text-slate-950 shadow-[0_24px_45px_-24px_rgba(34,211,238,0.65)] transition hover:brightness-105"
+                >
+                  Jetzt direkt buchen
+                </Link>
+              ) : (
+                <span className="inline-flex items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 px-7 py-4 text-sm font-semibold text-amber-100">
+                  Termin folgt, Buchung noch geschlossen
+                </span>
+              )}
               <Link
                 href={primaryCamp ? `/camps/${primaryCamp.slug}` : '/camps'}
                 className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/8 px-6 py-4 text-sm font-semibold text-white transition hover:bg-white/12"
