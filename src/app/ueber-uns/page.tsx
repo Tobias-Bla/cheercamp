@@ -6,22 +6,22 @@ const teamMembers = [
     name: 'Kai',
     role: 'Coach & Mit-Organisator',
     intro:
-      'Kai bringt Ruhe, Technikfokus und direktes Feedback auf die Flaeche. Gerade bei sauberen Basics, sicheren Progressions und klaren Korrekturen ist er ein wichtiger Teil des Camps.',
+      'Kai bringt Ruhe, Technikfokus und direktes Feedback auf die Fläche. Gerade bei sauberen Basics, sicheren Progressions und klaren Korrekturen ist er ein wichtiger Teil des Camps.',
     points: [
       'coacht gemeinsam mit Vio das Wochenende',
-      'gibt direktes Technik-Feedback auf der Flaeche',
-      'unterstuetzt auch bei Privates und individuellen Fragen',
+      'gibt direktes Technik-Feedback auf der Fläche',
+      'unterstützt auch bei Privates und individuellen Fragen',
     ],
   },
   {
     name: 'Vio',
     role: 'Coach & Organisatorin',
     intro:
-      'Vio organisiert die Camps, sammelt Themenwuensche und sorgt dafuer, dass aus der Idee ein rundes Wochenende wird. Gleichzeitig steht sie selbst als Coach auf der Flaeche und begleitet die Gruppen sehr nah.',
+      'Vio organisiert die Camps, sammelt Themenwünsche und sorgt dafür, dass aus der Idee ein rundes Wochenende wird. Gleichzeitig steht sie selbst als Coach auf der Fläche und begleitet die Gruppen sehr nah.',
     points: [
       'plant und organisiert die Camp-Wochenenden',
       'koordiniert Teilnehmende, Themen und Kommunikation',
-      'coacht Partnerstunts, Groupstunts und Privates mit Blick fuers Ganze',
+      'coacht Partnerstunts, Groupstunts und Privates mit Blick fürs Ganze',
     ],
   },
 ];
@@ -31,11 +31,11 @@ export default function AboutPage() {
     <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
       <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Ueber Uns</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Über Uns</p>
           <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">Kai und Vio hinter dem R.I.S.E. Camp</h1>
           <p className="mt-5 text-base leading-8 text-slate-300">
             Das Camp lebt nicht nur von Technik und Training, sondern auch von der Art, wie das Wochenende begleitet wird.
-            Kai und Vio verbinden Coaching, Orga und Community so, dass sich Leistung und Camp-Gefuehl nicht widersprechen.
+            Kai und Vio verbinden Coaching, Orga und Community so, dass sich Leistung und Camp-Gefühl nicht widersprechen.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -99,8 +99,8 @@ export default function AboutPage() {
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {[
             'saubere Progressions statt reiner Show',
-            'offene, persoenliche Camp-Atmosphaere',
-            'Partnerstunt-Fokus mit Platz fuer Groupstunts',
+            'offene, persönliche Camp-Atmosphäre',
+            'Partnerstunt-Fokus mit Platz für Groupstunts',
           ].map((item) => (
             <div key={item} className="rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-4 text-sm text-slate-200">
               {item}

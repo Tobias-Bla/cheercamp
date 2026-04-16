@@ -59,7 +59,7 @@ export const camps: Camp[] = [
     slug: 'spring-stunt-camp-2026',
     title: 'R.I.S.E. Camp - Special Edition',
     subtitle:
-      'Das naechste Cheercamp in St. Blasien mit Kai und Vio zum Specialpreis - Partnerstunt im Fokus, Groupstunts willkommen.',
+      'Das nächste Cheercamp in St. Blasien mit Kai und Vio zum Specialpreis - Partnerstunt im Fokus, Groupstunts willkommen.',
     location: 'St. Blasien',
     venue: 'Albtalhalle, St. Blasien',
     startDate: null,
@@ -118,7 +118,7 @@ export const camps: Camp[] = [
         title: 'Optionale Anreise ab 15:00 Uhr',
         details: [
           'Wer mag, kann bereits am Freitag in Ruhe anreisen und sich vor Ort einrichten.',
-          'Die Uebernachtung in der Halle ist inklusive.',
+          'Die Übernachtung in der Halle ist inklusive.',
         ],
       },
       {
@@ -135,8 +135,8 @@ export const camps: Camp[] = [
         day: 'Sonntag',
         title: 'Privates nach Absprache',
         details: [
-          'Pairs in Partnerstunts oder Groupstunts koennen exklusive 60- oder 90-Minuten-Slots anfragen.',
-          'Es sind Einzel-Sessions mit direktem Stunten mit dem Coach moeglich.',
+          'Pairs in Partnerstunts oder Groupstunts können exklusive 60- oder 90-Minuten-Slots anfragen.',
+          'Es sind Einzel-Sessions mit direktem Stunten mit dem Coach möglich.',
           'Privates sind nicht im Online-Preis enthalten und werden bar direkt an den Coach gezahlt.',
         ],
       },
@@ -205,8 +205,8 @@ export const camps: Camp[] = [
         day: 'Freitag',
         title: 'Optionale Anreise ab 15:00 Uhr',
         details: [
-          'Die optionale Anreise ist ab 15:00 Uhr moeglich.',
-          'Die Uebernachtung in der Halle ist inklusive.',
+          'Die optionale Anreise ist ab 15:00 Uhr möglich.',
+          'Die Übernachtung in der Halle ist inklusive.',
         ],
       },
       {
@@ -223,8 +223,8 @@ export const camps: Camp[] = [
         day: 'Sonntag',
         title: 'Privates nach Absprache',
         details: [
-          'Pairs in Partnerstunts oder Groupstunts koennen exklusive Private-Slots anfragen.',
-          'Es sind Einzel-Sessions mit direktem Stunten mit dem Coach moeglich.',
+          'Pairs in Partnerstunts oder Groupstunts können exklusive Private-Slots anfragen.',
+          'Es sind Einzel-Sessions mit direktem Stunten mit dem Coach möglich.',
           'Bezahlung der Privates erfolgt separat und bar direkt an den Coach.',
         ],
       },

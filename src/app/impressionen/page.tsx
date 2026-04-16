@@ -24,10 +24,10 @@ export default async function ImpressionenPage() {
       <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
         <div className="max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Impressionen</p>
-          <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">So fuehlt sich ein R.I.S.E. Camp vor Ort an</h1>
+          <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">So fühlt sich ein R.I.S.E. Camp vor Ort an</h1>
           <p className="mt-5 text-base leading-8 text-slate-300">
             Hier bekommen Besucher direkt einen Einblick in die Halle, die Stimmung, das Coaching und das Wochenende als Ganzes.
-            Genau das hilft oft am meisten, wenn jemand noch ueberlegt, ob das Camp zu ihm passt.
+            Genau das hilft oft am meisten, wenn jemand noch überlegt, ob das Camp zu ihm passt.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -49,10 +49,10 @@ export default async function ImpressionenPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Was die Bilder zeigen</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {[
-              'Training auf der Flaeche mit mehreren Setups gleichzeitig',
+              'Training auf der Fläche mit mehreren Setups gleichzeitig',
               'Direktes Feedback von Kai, Vio oder dem Guest Coach',
-              'Gemeinschaft, Uebernachtung und Camp-Wochenendstimmung',
-              'Partnerstunt im Fokus, Groupstunts ausdruecklich willkommen',
+              'Gemeinschaft, Übernachtung und Camp-Wochenendstimmung',
+              'Partnerstunt im Fokus, Groupstunts ausdrücklich willkommen',
             ].map((item) => (
               <div key={item} className="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-4 text-sm text-slate-200">
                 {item}

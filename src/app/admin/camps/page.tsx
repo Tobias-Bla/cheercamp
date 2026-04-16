@@ -139,7 +139,7 @@ function normalizeCampInput(formData: FormData): ManagedCampInput {
     dateLabel: String(formData.get('dateLabel') ?? '').trim() || null,
     priceCents: Number(String(formData.get('priceCents') ?? '0')),
     capacity,
-    capacityText: String(formData.get('capacityText') ?? '').trim() || `${capacity} Plaetze`,
+    capacityText: String(formData.get('capacityText') ?? '').trim() || `${capacity} Plätze`,
     ages: String(formData.get('ages') ?? '').trim(),
     level: String(formData.get('level') ?? '').trim(),
     coaches: parseLines(formData.get('coaches')),
@@ -341,23 +341,35 @@ function CampForm({
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="text-sm text-slate-200">
-            Cover Bildpfad
+            Hauptbild URL oder Pfad
             <input name="coverImage" defaultValue={camp.coverImage} className="field mt-2" />
+            <span className="mt-2 block text-xs leading-6 text-slate-400">
+              Kann so bleiben oder automatisch durch einen Upload ersetzt werden.
+            </span>
           </label>
           <label className="text-sm text-slate-200">
-            Cover Alt-Text
+            Beschreibung Hauptbild
             <input name="coverImageAlt" defaultValue={camp.coverImageAlt} className="field mt-2" />
+            <span className="mt-2 block text-xs leading-6 text-slate-400">
+              Kurz beschreiben, was auf dem Bild zu sehen ist.
+            </span>
           </label>
           <label className="text-sm text-slate-200">
-            Booking Bildpfad
+            Buchungsbild URL oder Pfad
             <input name="bookingImage" defaultValue={camp.bookingImage} className="field mt-2" />
+            <span className="mt-2 block text-xs leading-6 text-slate-400">
+              Dieses Bild wird auf der Buchungsseite angezeigt.
+            </span>
           </label>
           <label className="text-sm text-slate-200">
-            Booking Alt-Text
+            Beschreibung Buchungsbild
             <input name="bookingImageAlt" defaultValue={camp.bookingImageAlt} className="field mt-2" />
+            <span className="mt-2 block text-xs leading-6 text-slate-400">
+              Auch hier kurz beschreiben, was zu sehen ist.
+            </span>
           </label>
           <label className="text-sm text-slate-200">
-            Neues Cover hochladen
+            Hauptbild hochladen
             <input
               name="coverImageFile"
               type="file"
@@ -372,7 +384,7 @@ function CampForm({
             </span>
           </label>
           <label className="text-sm text-slate-200">
-            Neues Booking-Bild hochladen
+            Buchungsbild hochladen
             <input
               name="bookingImageFile"
               type="file"
@@ -388,13 +400,13 @@ function CampForm({
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/30 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Cover Vorschau</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Vorschau Hauptbild</p>
             <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-[1.25rem]">
               <Image src={camp.coverImage} alt={camp.coverImageAlt} fill className="object-cover" sizes="(min-width: 768px) 50vw, 100vw" />
             </div>
           </div>
           <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/30 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Booking Vorschau</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Vorschau Buchungsbild</p>
             <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-[1.25rem]">
               <Image
                 src={camp.bookingImage}
@@ -445,7 +457,7 @@ function CampForm({
               className="field mt-2 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950"
             />
             <span className="mt-2 block text-xs leading-6 text-slate-400">
-              Hochgeladene Bilder werden beim Speichern zur bestehenden Galerie hinzugefuegt.
+              Hochgeladene Bilder werden beim Speichern zur bestehenden Galerie hinzugefügt.
             </span>
           </label>
           <label className="text-sm text-slate-200 md:col-span-2">
@@ -494,11 +506,11 @@ function CampForm({
           </label>
           <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-4 text-sm text-slate-200">
             <input name="overnightIncluded" type="checkbox" defaultChecked={camp.overnightIncluded} className="h-4 w-4" />
-            Uebernachtung inklusive
+            Übernachtung inklusive
           </label>
           <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-4 text-sm text-slate-200">
             <input name="privateAvailable" type="checkbox" defaultChecked={camp.privateAvailable} className="h-4 w-4" />
-            Privates verfuegbar
+            Privates verfügbar
           </label>
         </div>
 
@@ -525,7 +537,7 @@ function createBlankCamp(): Camp {
     dateLabel: 'Termin folgt',
     priceCents: 8000,
     capacity: 35,
-    capacityText: '35 Plaetze',
+    capacityText: '35 Plätze',
     ages: 'Jugendliche & Erwachsene',
     level: 'Open Level',
     coaches: ['Kai', 'Vio'],
@@ -565,7 +577,7 @@ export default async function AdminCampsPage({
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Admin</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">Camps verwalten</h1>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
-            Hier koennen neue Camps angelegt und bestehende Eintraege aktualisiert werden. Bestehende Seed-Camps koennen einfach mit demselben Slug gespeichert werden und werden dann aus der Datenbank ueberschrieben.
+            Hier können neue Camps angelegt und bestehende Einträge aktualisiert werden. Bestehende Seed-Camps können einfach mit demselben Slug gespeichert werden und werden dann aus der Datenbank überschrieben.
           </p>
         </div>
 
@@ -580,7 +592,7 @@ export default async function AdminCampsPage({
             href="/camps"
             className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
           >
-            Oeffentliche Camps ansehen
+            Öffentliche Camps ansehen
           </Link>
         </div>
       </div>
@@ -601,7 +613,7 @@ export default async function AdminCampsPage({
         <CampForm
           camp={createBlankCamp()}
           heading="Neues Camp anlegen"
-          description="Wenn der Slug neu ist, wird ein neues Camp erzeugt. Wenn der Slug schon existiert, wird der vorhandene Datensatz ueberschrieben."
+          description="Wenn der Slug neu ist, wird ein neues Camp erzeugt. Wenn der Slug schon existiert, wird der vorhandene Datensatz überschrieben."
           actionLabel="Camp speichern"
           blobUploadsEnabled={blobUploadsEnabled}
         />
@@ -616,7 +628,7 @@ export default async function AdminCampsPage({
                 ? 'Dieses Camp wird bereits aus der Datenbank verwaltet.'
                 : 'Dieses Camp kommt aktuell noch aus den Seed-Daten. Beim Speichern wird es ab dann aus der Datenbank verwaltet.'
             }
-            actionLabel="Aenderungen speichern"
+            actionLabel="Änderungen speichern"
             blobUploadsEnabled={blobUploadsEnabled}
           />
         ))}
