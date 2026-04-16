@@ -74,3 +74,44 @@ model Booking {
   @@index([status])
   @@map("bookings")
 }
+
+model ManagedCamp {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  title              String
+  subtitle           String   @db.Text
+  location           String
+  venue              String
+  startDate          DateTime? @map("start_date")
+  endDate            DateTime? @map("end_date")
+  dateLabel          String?  @map("date_label")
+  priceCents         Int      @map("price_cents")
+  capacity           Int
+  capacityText       String   @map("capacity_text")
+  ages               String
+  level              String
+  coaches            Json
+  coachModeLabel     String   @map("coach_mode_label")
+  formatOptions      Json     @map("format_options")
+  generalCampTime    String   @map("general_camp_time")
+  overnightIncluded  Boolean  @default(true) @map("overnight_included")
+  privateAvailable   Boolean  @default(true) @map("private_available")
+  privatePaymentNote String   @db.Text @map("private_payment_note")
+  coverImage         String   @map("cover_image")
+  coverImageAlt      String   @map("cover_image_alt")
+  bookingImage       String   @map("booking_image")
+  bookingImageAlt    String   @map("booking_image_alt")
+  gallery            Json
+  privateOptions     Json     @map("private_options")
+  focus              Json
+  highlights         Json
+  schedule           Json
+  featured           Boolean  @default(false)
+  bookingOpen        Boolean  @default(false) @map("booking_open")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@index([bookingOpen])
+  @@index([featured])
+  @@map("managed_camps")
+}

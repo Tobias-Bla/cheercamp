@@ -9,7 +9,7 @@ import { bookingRequestSchema } from '@/lib/validations/booking';
 export async function POST(request: Request): Promise<Response> {
   try {
     const payload = bookingRequestSchema.parse(await request.json());
-    const camp = getCampBySlug(payload.campSlug);
+    const camp = await getCampBySlug(payload.campSlug);
 
     if (!camp) {
       return NextResponse.json({ error: 'Das ausgewählte Camp existiert nicht.' }, { status: 404 });

@@ -6,6 +6,8 @@ import { brandMedia } from '@/data/media';
 const navigationItems = [
   { href: '/', label: 'Start' },
   { href: '/camps', label: 'Camps' },
+  { href: '/ueber-uns', label: 'Über Uns' },
+  { href: '/impressionen', label: 'Impressionen' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Kontakt' },
 ];

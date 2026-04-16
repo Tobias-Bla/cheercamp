@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getPrismaClient } from '@/lib/prisma';
 import { formatCurrency, formatDate } from '@/lib/format';
 
@@ -34,6 +35,14 @@ export default async function AdminBookingsPage() {
       <div className="mb-8">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Admin</p>
         <h1 className="mt-3 text-4xl font-semibold text-white">Buchungen</h1>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href="/admin/camps"
+            className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:border-fuchsia-300 hover:text-fuchsia-200"
+          >
+            Camps verwalten
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4">

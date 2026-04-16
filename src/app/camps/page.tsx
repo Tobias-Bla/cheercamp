@@ -2,8 +2,10 @@
 import { CampCard } from '@/components/camp-card';
 import { getAllCamps } from '@/lib/camps';
 
-export default function CampsPage() {
-  const availableCamps = getAllCamps();
+export const dynamic = 'force-dynamic';
+
+export default async function CampsPage() {
+  const availableCamps = await getAllCamps();
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">

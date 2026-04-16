@@ -2,12 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BookingForm } from '@/components/booking-form';
-import { getAllCamps, getCampBySlug } from '@/lib/camps';
+import { getCampBySlug } from '@/lib/camps';
 import { formatCurrency, formatDateRange } from '@/lib/format';
 
-export function generateStaticParams(): Array<{ slug: string }> {
-  return getAllCamps().map((camp) => ({ slug: camp.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function BookingPage({
   params,
@@ -15,7 +13,7 @@ export default async function BookingPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const camp = getCampBySlug(slug);
+  const camp = await getCampBySlug(slug);
 
   if (!camp) {
     notFound();
