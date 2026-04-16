@@ -235,7 +235,7 @@ export async function getCampBySlug(slug: string): Promise<Camp | undefined> {
 export async function getAdminCamps(): Promise<AdminCamp[]> {
   const defaultCampMap = new Map(defaultCamps.map((camp) => [camp.slug, camp] as const));
   const managedSlugs = new Set<string>();
-  const mergedCamps = new Map(
+  const mergedCamps = new Map<string, AdminCamp>(
     defaultCamps.map((camp) => [
       camp.slug,
       {
