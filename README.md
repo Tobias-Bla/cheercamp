@@ -30,13 +30,15 @@ Ein modernes MVP für wiederkehrende Cheercamps in St. Blasien mit:
 - Prisma ORM
 - Neon PostgreSQL
 - Stripe Checkout
+- Vercel Blob fuer persistente Bild-Uploads
 
 ## Wichtige Hinweise
 - Die Camp-Daten sind im MVP statisch in `src/data/camps.ts` hinterlegt.
 - Buchungen werden in PostgreSQL gespeichert.
 - Online bezahlt wird nur das General Camp.
 - Privates am Sonntag werden separat angefragt und bar direkt an den Coach gezahlt.
-- `/admin` ist per Basic Auth abgesichert, sobald `ADMIN_USERNAME` und `ADMIN_PASSWORD` gesetzt sind.
+- `/admin` ist per Basic Auth abgesichert, sobald mindestens ein gueltiges Admin-Zugangspaar gesetzt ist (`ADMIN_USERNAME` / `ADMIN_PASSWORD`, optional auch `_2` und `_3`).
+- Camp-Bilder koennen optional ueber Vercel Blob hochgeladen werden. Dafuer braucht das Projekt einen Public Blob Store und `BLOB_READ_WRITE_TOKEN`.
 - `Impressum`, `Datenschutz` und die Kontaktangaben enthalten noch Platzhalter und müssen vor Livegang ersetzt werden.
 
 ## Lokales Setup
@@ -66,8 +68,13 @@ npm run dev
 - `NEXT_PUBLIC_SITE_URL`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
+- `BLOB_READ_WRITE_TOKEN`
 - `ADMIN_USERNAME`
 - `ADMIN_PASSWORD`
+- `ADMIN_USERNAME_2`
+- `ADMIN_PASSWORD_2`
+- `ADMIN_USERNAME_3`
+- `ADMIN_PASSWORD_3`
 
 ## Stripe Webhook
 In Stripe einen Webhook auf folgende URL anlegen:
@@ -79,6 +86,14 @@ https://deine-domain.de/api/stripe/webhook
 Wichtige Events:
 - `checkout.session.completed`
 - `checkout.session.expired`
+
+## Vercel Blob fuer Camp-Bilder
+1. Im Vercel-Projekt unter `Storage` einen neuen Blob Store anlegen
+2. Den Store als `Public` erstellen
+3. Sicherstellen, dass `BLOB_READ_WRITE_TOKEN` dem Projekt-Environment hinzugefuegt wird
+4. Danach koennen im Admin-Bereich unter `/admin/camps` Cover-, Booking- und Galerie-Bilder direkt hochgeladen werden
+
+Hinweis: Der aktuelle Upload laeuft serverseitig. Einzelne Bilddateien sollten deshalb unter ca. 4 MB bleiben.
 
 ## Deployment-Reihenfolge
 1. GitHub-Repository anlegen

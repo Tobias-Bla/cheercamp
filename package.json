@@ -17,6 +17,7 @@
   "dependencies": {
     "@prisma/adapter-neon": "^7.0.0",
     "@prisma/client": "^7.0.0",
+    "@vercel/blob": "^1.1.1",
     "dotenv": "^17.0.0",
     "next": "^16.1.0",
     "react": "^19.2.0",

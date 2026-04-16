@@ -1,7 +1,9 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { camps as seededCamps, type Camp } from '@/data/camps';
+import { CAMP_IMAGE_ACCEPT, isBlobUploadEnabled, uploadCampImage } from '@/lib/blob';
 import { getAdminCamps, upsertManagedCamp, type ManagedCampInput } from '@/lib/camps';
 
 export const dynamic = 'force-dynamic';
@@ -70,6 +72,22 @@ function serializeSchedule(values: Camp['schedule']): string {
 
 function getBoolean(formData: FormData, key: string): boolean {
   return formData.get(key) === 'on';
+}
+
+function getFile(formData: FormData, key: string): File | null {
+  const value = formData.get(key);
+
+  if (!(value instanceof File) || value.size === 0) {
+    return null;
+  }
+
+  return value;
+}
+
+function getFiles(formData: FormData, key: string): File[] {
+  return formData
+    .getAll(key)
+    .filter((value): value is File => value instanceof File && value.size > 0);
 }
 
 function getSeedCampBySlug(slug: string): Camp | undefined {
@@ -150,6 +168,42 @@ async function saveCampAction(formData: FormData): Promise<void> {
 
   const input = normalizeCampInput(formData);
   const seedCamp = getSeedCampBySlug(input.slug);
+  const uploadedCoverImage = await (async () => {
+    const file = getFile(formData, 'coverImageFile');
+
+    if (!file) {
+      return null;
+    }
+
+    return uploadCampImage({
+      file,
+      campSlug: input.slug,
+      kind: 'cover',
+    });
+  })();
+  const uploadedBookingImage = await (async () => {
+    const file = getFile(formData, 'bookingImageFile');
+
+    if (!file) {
+      return null;
+    }
+
+    return uploadCampImage({
+      file,
+      campSlug: input.slug,
+      kind: 'booking',
+    });
+  })();
+  const uploadedGallery = await Promise.all(
+    getFiles(formData, 'galleryFiles').map(async (file, index) => ({
+      src: await uploadCampImage({
+        file,
+        campSlug: input.slug,
+        kind: 'gallery',
+      }),
+      alt: `${input.title || 'Camp'} Galerie ${input.gallery.length + index + 1}`,
+    })),
+  );
 
   await upsertManagedCamp({
     ...input,
@@ -166,11 +220,20 @@ async function saveCampAction(formData: FormData): Promise<void> {
       input.privatePaymentNote ||
       seedCamp?.privatePaymentNote ||
       'Privates werden separat angefragt und direkt in bar an den Coach gezahlt.',
-    coverImage: input.coverImage || seedCamp?.coverImage || '/images/hero-group-photo.webp',
+    coverImage: uploadedCoverImage || input.coverImage || seedCamp?.coverImage || '/images/hero-group-photo.webp',
     coverImageAlt: input.coverImageAlt || seedCamp?.coverImageAlt || 'Camp-Bild',
-    bookingImage: input.bookingImage || seedCamp?.bookingImage || input.coverImage || '/images/team-lineup.webp',
+    bookingImage:
+      uploadedBookingImage ||
+      input.bookingImage ||
+      seedCamp?.bookingImage ||
+      uploadedCoverImage ||
+      input.coverImage ||
+      '/images/team-lineup.webp',
     bookingImageAlt: input.bookingImageAlt || seedCamp?.bookingImageAlt || input.coverImageAlt || 'Camp-Bild',
-    gallery: input.gallery.length > 0 ? input.gallery : seedCamp?.gallery || [],
+    gallery:
+      input.gallery.length > 0 || uploadedGallery.length > 0
+        ? [...input.gallery, ...uploadedGallery]
+        : seedCamp?.gallery || [],
     privateOptions: input.privateOptions.length > 0 ? input.privateOptions : seedCamp?.privateOptions || buildDefaultPrivateOptions(),
     focus: input.focus.length > 0 ? input.focus : seedCamp?.focus || ['Partnerstunt', 'Groupstunt'],
     highlights: input.highlights.length > 0 ? input.highlights : seedCamp?.highlights || [],
@@ -193,11 +256,13 @@ function CampForm({
   heading,
   description,
   actionLabel,
+  blobUploadsEnabled,
 }: {
   camp: Camp;
   heading: string;
   description: string;
   actionLabel: string;
+  blobUploadsEnabled: boolean;
 }) {
   return (
     <article className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
@@ -291,6 +356,55 @@ function CampForm({
             Booking Alt-Text
             <input name="bookingImageAlt" defaultValue={camp.bookingImageAlt} className="field mt-2" />
           </label>
+          <label className="text-sm text-slate-200">
+            Neues Cover hochladen
+            <input
+              name="coverImageFile"
+              type="file"
+              accept={CAMP_IMAGE_ACCEPT}
+              disabled={!blobUploadsEnabled}
+              className="field mt-2 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950"
+            />
+            <span className="mt-2 block text-xs leading-6 text-slate-400">
+              {blobUploadsEnabled
+                ? 'Beim Speichern wird das Bild dauerhaft in Vercel Blob gespeichert.'
+                : 'Uploads sind deaktiviert, bis BLOB_READ_WRITE_TOKEN gesetzt ist.'}
+            </span>
+          </label>
+          <label className="text-sm text-slate-200">
+            Neues Booking-Bild hochladen
+            <input
+              name="bookingImageFile"
+              type="file"
+              accept={CAMP_IMAGE_ACCEPT}
+              disabled={!blobUploadsEnabled}
+              className="field mt-2 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950"
+            />
+            <span className="mt-2 block text-xs leading-6 text-slate-400">
+              JPG, PNG, WebP oder AVIF, bis ca. 4 MB pro Datei.
+            </span>
+          </label>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/30 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Cover Vorschau</p>
+            <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-[1.25rem]">
+              <Image src={camp.coverImage} alt={camp.coverImageAlt} fill className="object-cover" sizes="(min-width: 768px) 50vw, 100vw" />
+            </div>
+          </div>
+          <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/30 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Booking Vorschau</p>
+            <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-[1.25rem]">
+              <Image
+                src={camp.bookingImage}
+                alt={camp.bookingImageAlt}
+                fill
+                className="object-cover"
+                sizes="(min-width: 768px) 50vw, 100vw"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -321,6 +435,20 @@ function CampForm({
             <span className="mt-2 block text-xs leading-6 text-slate-400">Pro Zeile: Bildpfad | Alt-Text</span>
           </label>
           <label className="text-sm text-slate-200 md:col-span-2">
+            Galerie-Bilder hochladen
+            <input
+              name="galleryFiles"
+              type="file"
+              accept={CAMP_IMAGE_ACCEPT}
+              multiple
+              disabled={!blobUploadsEnabled}
+              className="field mt-2 file:mr-4 file:rounded-full file:border-0 file:bg-white file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-950"
+            />
+            <span className="mt-2 block text-xs leading-6 text-slate-400">
+              Hochgeladene Bilder werden beim Speichern zur bestehenden Galerie hinzugefuegt.
+            </span>
+          </label>
+          <label className="text-sm text-slate-200 md:col-span-2">
             Private Optionen
             <textarea
               name="privateOptions"
@@ -341,6 +469,19 @@ function CampForm({
             <span className="mt-2 block text-xs leading-6 text-slate-400">Pro Zeile: Tag | Titel | Detail 1 ;; Detail 2</span>
           </label>
         </div>
+
+        {camp.gallery.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {camp.gallery.map((image) => (
+              <div key={image.src} className="rounded-[1.5rem] border border-white/10 bg-slate-950/30 p-3">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[1rem]">
+                  <Image src={image.src} alt={image.alt} fill className="object-cover" sizes="(min-width: 1280px) 20vw, (min-width: 640px) 50vw, 100vw" />
+                </div>
+                <p className="mt-3 text-xs leading-5 text-slate-300">{image.alt}</p>
+              </div>
+            ))}
+          </div>
+        ) : null}
 
         <div className="grid gap-4 md:grid-cols-4">
           <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/30 px-4 py-4 text-sm text-slate-200">
@@ -415,6 +556,7 @@ export default async function AdminCampsPage({
 }) {
   const camps = await getAdminCamps();
   const { saved } = await searchParams;
+  const blobUploadsEnabled = isBlobUploadEnabled();
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
@@ -449,12 +591,19 @@ export default async function AdminCampsPage({
         </div>
       ) : null}
 
+      <div className="mb-8 rounded-[2rem] border border-white/10 bg-slate-950/30 px-6 py-4 text-sm leading-7 text-slate-300">
+        {blobUploadsEnabled
+          ? 'Bild-Uploads sind aktiv. Neue Dateien werden dauerhaft in Vercel Blob gespeichert und danach auf der Website angezeigt.'
+          : 'Bild-Uploads sind noch nicht aktiv. Lege in Vercel zuerst einen Public Blob Store an, damit BLOB_READ_WRITE_TOKEN gesetzt wird.'}
+      </div>
+
       <div className="grid gap-8">
         <CampForm
           camp={createBlankCamp()}
           heading="Neues Camp anlegen"
           description="Wenn der Slug neu ist, wird ein neues Camp erzeugt. Wenn der Slug schon existiert, wird der vorhandene Datensatz ueberschrieben."
           actionLabel="Camp speichern"
+          blobUploadsEnabled={blobUploadsEnabled}
         />
 
         {camps.map((camp) => (
@@ -468,6 +617,7 @@ export default async function AdminCampsPage({
                 : 'Dieses Camp kommt aktuell noch aus den Seed-Daten. Beim Speichern wird es ab dann aus der Datenbank verwaltet.'
             }
             actionLabel="Aenderungen speichern"
+            blobUploadsEnabled={blobUploadsEnabled}
           />
         ))}
       </div>

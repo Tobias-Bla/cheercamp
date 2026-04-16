@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { getAdminCredentials } from '@/lib/env';
 
 function unauthorizedResponse(): NextResponse {
   return new NextResponse('Authentication required.', {
@@ -10,10 +11,9 @@ function unauthorizedResponse(): NextResponse {
 }
 
 export function middleware(request: NextRequest): NextResponse {
-  const username = process.env.ADMIN_USERNAME;
-  const password = process.env.ADMIN_PASSWORD;
+  const adminCredentials = getAdminCredentials();
 
-  if (!username || !password) {
+  if (adminCredentials.length === 0) {
     return new NextResponse('Not found.', { status: 404 });
   }
 
@@ -39,7 +39,11 @@ export function middleware(request: NextRequest): NextResponse {
   const providedUsername = decoded.slice(0, separatorIndex);
   const providedPassword = decoded.slice(separatorIndex + 1);
 
-  if (providedUsername !== username || providedPassword !== password) {
+  const isAuthorized = adminCredentials.some(
+    ({ username, password }) => providedUsername === username && providedPassword === password,
+  );
+
+  if (!isAuthorized) {
     return unauthorizedResponse();
   }
 
