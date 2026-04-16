@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/generated/prisma';
 import { camps as defaultCamps, type Camp, type CampGalleryImage, type PrivateOption } from '@/data/camps';
 import { getPrismaClient } from '@/lib/prisma';
 
