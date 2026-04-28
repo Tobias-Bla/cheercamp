@@ -94,7 +94,8 @@
         ]
       }
     ],
-    "featured": true
+    "featured": true,
+    "bookingOpen": false
   },
   {
     "slug": "autumn-stunt-camp-2026",
@@ -191,6 +192,7 @@
         ]
       }
     ],
-    "featured": true
+    "featured": true,
+    "bookingOpen": true
   }
 ]

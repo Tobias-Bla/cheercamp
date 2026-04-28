@@ -1,25 +1,27 @@
 import type { MetadataRoute } from 'next';
 import { getAllCamps } from '@/lib/camps';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
   if (!siteUrl) {
     return [];
   }
 
-  const staticRoutes = ['', '/camps', '/faq', '/contact', '/impressum', '/datenschutz'];
+  const staticRoutes = ['', '/camps', '/ueber-uns', '/impressionen', '/faq', '/contact', '/impressum', '/datenschutz'];
   const entries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${siteUrl}${route}`,
   }));
 
-  for (const camp of getAllCamps()) {
+  for (const camp of await getAllCamps()) {
     entries.push({
       url: `${siteUrl}/camps/${camp.slug}`,
     });
-    entries.push({
-      url: `${siteUrl}/book/${camp.slug}`,
-    });
+    if (camp.bookingOpen) {
+      entries.push({
+        url: `${siteUrl}/book/${camp.slug}`,
+      });
+    }
   }
 
   return entries;

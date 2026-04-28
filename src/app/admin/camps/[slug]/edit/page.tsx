@@ -148,10 +148,10 @@ export default async function EditCampPage({
         <FormSection title="Termin und Buchung" description="Alles, was auf Buchungsseite und Camp-Karten direkt sichtbar ist.">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <Field label="Startdatum">
-              <input className="field" name="startDate" type="date" defaultValue={camp.startDate} required />
+              <input className="field" name="startDate" type="date" defaultValue={camp.startDate ?? ''} required />
             </Field>
             <Field label="Enddatum">
-              <input className="field" name="endDate" type="date" defaultValue={camp.endDate} required />
+              <input className="field" name="endDate" type="date" defaultValue={camp.endDate ?? ''} required />
             </Field>
             <Field label="Preis in Euro">
               <input className="field" name="priceEuros" type="number" min="0" step="0.01" defaultValue={camp.priceCents / 100} required />

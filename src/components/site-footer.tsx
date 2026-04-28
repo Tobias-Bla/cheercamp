@@ -23,6 +23,12 @@ export function SiteFooter() {
         <div>
           <p className="font-semibold text-white">Rechtliches</p>
           <div className="mt-3 flex flex-col gap-2">
+            <Link href="/ueber-uns" className="transition hover:text-white">
+              Über Uns
+            </Link>
+            <Link href="/impressionen" className="transition hover:text-white">
+              Impressionen
+            </Link>
             <Link href="/impressum" className="transition hover:text-white">
               Impressum
             </Link>

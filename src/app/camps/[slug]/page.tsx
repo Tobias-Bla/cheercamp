@@ -1,12 +1,10 @@
 ﻿import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getAllCamps, getCampBySlug } from '@/lib/camps';
+import { getCampBySlug } from '@/lib/camps';
 import { formatCurrency, formatDateRange } from '@/lib/format';
 
-export function generateStaticParams(): Array<{ slug: string }> {
-  return getAllCamps().map((camp) => ({ slug: camp.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function CampDetailPage({
   params,
@@ -14,7 +12,7 @@ export default async function CampDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const camp = getCampBySlug(slug);
+  const camp = await getCampBySlug(slug);
 
   if (!camp) {
     notFound();
@@ -45,7 +43,7 @@ export default async function CampDetailPage({
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
               <p className="text-sm text-slate-400">Termin</p>
-              <p className="mt-2 text-lg font-semibold text-white">{formatDateRange(camp.startDate, camp.endDate)}</p>
+              <p className="mt-2 text-lg font-semibold text-white">{camp.dateLabel ?? formatDateRange(camp.startDate!, camp.endDate!)}</p>
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
               <p className="text-sm text-slate-400">Preis</p>
@@ -130,16 +128,23 @@ export default async function CampDetailPage({
             <p>• {camp.formatOptions.join(' & ')}</p>
             <p>• Übernachtung in der Halle inklusive</p>
             <p>• Privates am Sonntag separat</p>
+            <p>• Verpflegung exklusive</p>
           </div>
           <p className="mt-6 rounded-2xl border border-white/10 bg-slate-950/40 p-4 text-xs leading-6 text-slate-300">
             {camp.privatePaymentNote}
           </p>
-          <Link
-            href={`/book/${camp.slug}`}
-            className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
-          >
-            Jetzt buchen
-          </Link>
+          {camp.bookingOpen ? (
+            <Link
+              href={`/book/${camp.slug}`}
+              className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+            >
+              Jetzt buchen
+            </Link>
+          ) : (
+            <div className="mt-8 rounded-2xl border border-amber-300/25 bg-amber-300/10 px-5 py-4 text-sm font-semibold text-amber-100">
+              Termin steht noch nicht fest. Die Buchung wird freigeschaltet, sobald das Datum fix ist.
+            </div>
+          )}
         </aside>
       </div>
     </section>

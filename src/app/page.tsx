@@ -6,23 +6,27 @@ import { siteConfig } from '@/data/site-config';
 import { homeMedia } from '@/data/media';
 
 const benefits = [
-  'Online-Buchung und direkte Zahlung für das General Camp',
-  '35 Plätze pro Camp in der Albtalhalle St. Blasien',
+  'Buchung, Wunschthemen und Zahlung an einem Ort',
+  '35 Plaetze pro Camp in der Albtalhalle St. Blasien',
   'Partnerstunt im Fokus, Groupstunts willkommen',
-  'Privates am Sonntag separat anfragbar',
+  'Uebernachtung in der Halle inklusive',
 ];
 
 const flowItems = [
+  'Freitag: optionale Anreise ab 15:00 Uhr',
   'Samstag: General Camp von 12:00 bis 18:00 Uhr',
   'Wünsche für bestimmte Stunts oder Themen können vorab angegeben werden',
   'Die beliebtesten Inhalte fließen direkt ins Coaching ein',
   'Sonntag: optionale Privates für Pairs, Groups oder teils Einzelpersonen',
 ];
 
-export default function HomePage() {
-  const featuredCamps = getFeaturedCamps();
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const featuredCamps = await getFeaturedCamps();
   const primaryCamp = featuredCamps[0];
-  const atmosphereMedia = homeMedia.atmosphere;
+  const bookableCamp = featuredCamps.find((camp) => camp.bookingOpen) ?? featuredCamps[0];
+  const galleryPreview = [homeMedia.hero, ...homeMedia.atmosphere];
 
   return (
     <div>
@@ -32,24 +36,30 @@ export default function HomePage() {
             Stunt-Weekend in der Albtalhalle St. Blasien
           </p>
           <h1 className="mt-8 max-w-3xl text-5xl font-black tracking-tight text-white sm:text-6xl">
-            Partnerstunt-Camps mit echter Camp-Atmosphäre statt nur trockener Orga.
+            R.I.S.E. Camp
           </h1>
+          <div className="mt-5 grid max-w-2xl grid-cols-2 gap-2 text-base font-medium text-cyan-200 sm:grid-cols-4">
+            <span>Respect</span>
+            <span>Inspire</span>
+            <span>Stunt</span>
+            <span>Elevate</span>
+          </div>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            {siteConfig.claim} Die Seite bündelt Buchung, Zahlung und alle wichtigen Infos – und zeigt direkt, wie sich
-            ein Wochenende bei RISE anfühlt.
+            {siteConfig.claim} Besucher bekommen hier direkt einen klaren Einstieg: Was ist das Camp, welches Wochenende
+            ist als Naechstes relevant und wie fuehlt sich R.I.S.E. vor Ort an.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="/camps"
+              href={bookableCamp?.bookingOpen ? `/book/${bookableCamp.slug}` : '/camps'}
               className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
             >
-              Camps ansehen
+              {bookableCamp?.bookingOpen ? 'Jetzt Platz sichern' : 'Camps ansehen'}
             </Link>
             <Link
-              href="/contact"
+              href="/impressionen"
               className="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-fuchsia-300 hover:text-fuchsia-200"
             >
-              Kontakt aufnehmen
+              Impressionen ansehen
             </Link>
           </div>
           <div className="mt-10 grid gap-3 sm:grid-cols-2">
@@ -64,10 +74,10 @@ export default function HomePage() {
           </div>
 
           <div className="mt-8 max-w-xl rounded-[1.75rem] border border-white/15 bg-white/10 p-5 shadow-[0_22px_60px_-38px_rgba(255,255,255,0.35)] backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Warum das sofort funktioniert</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Warum Besucher hier schneller entscheiden koennen</p>
             <p className="mt-3 text-sm leading-7 text-slate-100">
-              Buchung, Camp-Wünsche und Zahlungsstart liegen direkt an einem Ort. Für Eltern und Athletinnen ist der
-              Einstieg dadurch deutlich klarer als per DM, Formular-Pingpong oder einzelner Umfrage.
+              Statt sich Infos aus Posts, DMs und Umfragen zusammenzusuchen, sehen Interessierte hier den Ablauf, die
+              Stimmung, das naechste Camp und den direkten Weg zur Buchung.
             </p>
           </div>
         </div>
@@ -86,10 +96,8 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/25 to-transparent" />
             </div>
             <div className="absolute left-5 top-5 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 backdrop-blur">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Real Camp Impressions</p>
-              <p className="mt-2 max-w-[14rem] text-sm text-slate-200">
-                Kein Stock-Material – echte Bilder aus euren bisherigen Weekends.
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Weekend Preview</p>
+              <p className="mt-2 max-w-[16rem] text-sm text-slate-200">Ein schneller Einblick in Training, Halle und Camp-Stimmung.</p>
             </div>
           </div>
 
@@ -106,9 +114,13 @@ export default function HomePage() {
             <h2 className="mt-4 text-[2.15rem] font-semibold leading-tight text-white">{primaryCamp?.title}</h2>
             <p className="mt-3 text-base leading-7 text-slate-200">{primaryCamp?.subtitle}</p>
             <div className="mt-6 rounded-2xl border border-white/12 bg-white/10 p-4">
-              <p className="text-sm font-medium text-white">Direkt online buchbar</p>
+              <p className="text-sm font-medium text-white">
+                {primaryCamp?.bookingOpen ? 'Direkt online buchbar' : 'Buchung startet, sobald das Datum feststeht'}
+              </p>
               <p className="mt-2 text-sm leading-6 text-slate-200">
-                General Camp online reservieren und bezahlen. Privates am Sonntag bleiben flexibel als Zusatzanfrage.
+                {primaryCamp?.bookingOpen
+                  ? 'General Camp online reservieren und bezahlen. Privates am Sonntag bleiben flexibel als Zusatzanfrage.'
+                  : 'Das naechste Cheercamp in St. Blasien mit Kai und Vio zum Specialpreis wird erst nach finaler Terminankuendigung freigeschaltet.'}
               </p>
             </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -119,12 +131,18 @@ export default function HomePage() {
               ))}
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href={primaryCamp ? `/book/${primaryCamp.slug}` : '/camps'}
-                className="inline-flex items-center justify-center rounded-full bg-linear-to-r from-fuchsia-500 via-pink-400 to-cyan-400 px-7 py-4 text-sm font-semibold text-slate-950 shadow-[0_24px_45px_-24px_rgba(34,211,238,0.65)] transition hover:brightness-105"
-              >
-                Jetzt direkt buchen
-              </Link>
+              {primaryCamp?.bookingOpen ? (
+                <Link
+                  href={primaryCamp ? `/book/${primaryCamp.slug}` : '/camps'}
+                  className="inline-flex items-center justify-center rounded-full bg-linear-to-r from-fuchsia-500 via-pink-400 to-cyan-400 px-7 py-4 text-sm font-semibold text-slate-950 shadow-[0_24px_45px_-24px_rgba(34,211,238,0.65)] transition hover:brightness-105"
+                >
+                  Jetzt direkt buchen
+                </Link>
+              ) : (
+                <span className="inline-flex items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 px-7 py-4 text-sm font-semibold text-amber-100">
+                  Termin folgt, Buchung noch geschlossen
+                </span>
+              )}
               <Link
                 href={primaryCamp ? `/camps/${primaryCamp.slug}` : '/camps'}
                 className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/8 px-6 py-4 text-sm font-semibold text-white transition hover:bg-white/12"
@@ -132,6 +150,22 @@ export default function HomePage() {
                 Erst Camp ansehen
               </Link>
             </div>
+
+            {bookableCamp && bookableCamp.slug !== primaryCamp?.slug ? (
+              <div className="mt-6 rounded-2xl border border-white/12 bg-slate-950/45 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Aktuell buchbar</p>
+                <p className="mt-2 text-lg font-semibold text-white">{bookableCamp.title}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-300">
+                  Wer nicht auf die naechste Terminankuendigung warten will, kann direkt zum aktuellen Buchungsflow gehen.
+                </p>
+                <Link
+                  href={`/book/${bookableCamp.slug}`}
+                  className="mt-4 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+                >
+                  Zum buchbaren Camp
+                </Link>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>
@@ -160,50 +194,42 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-20 lg:px-8">
-        <div className="mb-8 max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Atmosphäre vor Ort</p>
-          <h2 className="mt-2 text-3xl font-semibold text-white">
-            Training, Community und ein Wochenende, das nach Camp aussieht
-          </h2>
-          <p className="mt-4 text-base leading-7 text-slate-300">
-            Die Fotos sollen nicht nur dekorativ sein: Sie zeigen direkt, wie die Camps aufgebaut sind – viele Stunts
-            auf der Fläche, gemeinsames Essen, direkte Coach-Nähe und ein sehr persönlicher Rahmen.
-          </p>
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5">
-            <div className="relative aspect-[16/10]">
-              <Image
-                src={atmosphereMedia[0].src}
-                alt={atmosphereMedia[0].alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 55vw"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/10 to-transparent" />
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 p-6">
-              <p className="text-lg font-semibold text-white">Viele Gruppen parallel, aber trotzdem strukturiert</p>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-200">
-                Genau dafür sind Partner- und Groupstunt-Camps gemacht: mehrere Setups gleichzeitig, viel Input und
-                trotzdem genug Raum für Wünsche und gezielte Korrekturen.
-              </p>
+        <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Impressionen</p>
+            <h2 className="mt-2 text-3xl font-semibold text-white">Bilder bekommen jetzt einen eigenen Platz</h2>
+            <p className="mt-4 text-base leading-7 text-slate-300">
+              Statt die Startseite mit zu vielen Fotos zu ueberladen, fuehrt der neue Bereich Impressionen Besucher
+              gezielt in Halle, Stimmung, Community und Training hinein.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link
+                href="/impressionen"
+                className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+              >
+                Alle Impressionen ansehen
+              </Link>
+              <Link
+                href="/camps"
+                className="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-fuchsia-300 hover:text-fuchsia-200"
+              >
+                Danach zu den Camps
+              </Link>
             </div>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
-            {atmosphereMedia.slice(1).map((image) => (
+          <div className="grid gap-6 md:grid-cols-3">
+            {galleryPreview.map((image, index) => (
               <div key={image.src} className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5">
-                <div className="relative aspect-[4/3] lg:aspect-[4/3]">
+                <div className={`relative ${index === 0 ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}>
                   <Image
                     src={image.src}
                     alt={image.alt}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 1024px) 50vw, 28vw"
+                    sizes="(max-width: 768px) 100vw, 30vw"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-slate-950/75 via-transparent to-transparent" />
                 </div>
               </div>
             ))}

@@ -21,8 +21,9 @@ export type Camp = {
   subtitle: string;
   location: string;
   venue: string;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
+  dateLabel?: string | null;
   priceCents: number;
   capacity: number;
   capacityText: string;
@@ -52,6 +53,7 @@ export type Camp = {
     details: string[];
   }>;
   featured: boolean;
+  bookingOpen: boolean;
 };
 
 export const camps = campsData as Camp[];

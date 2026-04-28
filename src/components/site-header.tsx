@@ -6,6 +6,8 @@ import { brandMedia } from '@/data/media';
 const navigationItems = [
   { href: '/', label: 'Start' },
   { href: '/camps', label: 'Camps' },
+  { href: '/ueber-uns', label: 'Über Uns' },
+  { href: '/impressionen', label: 'Impressionen' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Kontakt' },
 ];
@@ -27,7 +29,7 @@ export function SiteHeader() {
           </div>
           <div className="hidden sm:block">
             <p className="text-[0.82rem] font-bold uppercase tracking-[0.28em] text-fuchsia-300">{siteConfig.name}</p>
-            <p className="mt-1 text-sm text-slate-200">Partnerstunt & Groupstunt Weekends</p>
+            <p className="mt-1 text-sm text-slate-200">Respect, Inspire, Stunt, Elevate</p>
           </div>
         </Link>
 
