@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { camps as seededCamps, type Camp } from '@/data/camps';
+import { ScrollToTopOnMount } from '@/components/scroll-to-top-on-mount';
 import { CAMP_IMAGE_ACCEPT, isBlobUploadEnabled, uploadCampImage } from '@/lib/blob';
 import { deleteManagedCamp, getAdminCamps, upsertManagedCamp, type ManagedCampInput } from '@/lib/camps';
 
@@ -635,9 +636,11 @@ export default async function AdminCampsPage({
   const { saved, deleted, deleteError } = await searchParams;
   const blobUploadsEnabled = isBlobUploadEnabled();
   const deleteErrorMessage = getDeleteErrorMessage(deleteError);
+  const shouldScrollToStatus = Boolean(saved || deleted || deleteError);
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+      <ScrollToTopOnMount enabled={shouldScrollToStatus} />
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Admin</p>

@@ -43,9 +43,6 @@ export default async function CampsPage() {
             />
             <div className="absolute inset-0 bg-linear-to-t from-slate-950/55 via-transparent to-transparent" />
           </div>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
-            Das Bild zeigt die Atmosphäre vor Ort und ist kein buchbares Camp.
-          </p>
         </div>
       </div>
 

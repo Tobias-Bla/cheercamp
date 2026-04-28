@@ -25,7 +25,7 @@ export const dynamic = 'force-dynamic';
 export default async function HomePage() {
   const featuredCamps = await getFeaturedCamps();
   const primaryCamp = featuredCamps[0];
-  const bookableCamp = featuredCamps.find((camp) => camp.bookingOpen) ?? featuredCamps[0];
+  const bookableCamp = featuredCamps.find((camp) => camp.bookingOpen);
   const galleryPreview = [homeMedia.hero, ...homeMedia.atmosphere];
 
   return (
@@ -50,16 +50,16 @@ export default async function HomePage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href={bookableCamp?.bookingOpen ? `/book/${bookableCamp.slug}` : '/camps'}
+              href="/impressionen"
               className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
             >
-              {bookableCamp?.bookingOpen ? 'Jetzt Platz sichern' : 'Camps ansehen'}
+              Impressionen ansehen
             </Link>
             <Link
-              href="/impressionen"
+              href="/camps"
               className="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-fuchsia-300 hover:text-fuchsia-200"
             >
-              Impressionen ansehen
+              Camps ansehen
             </Link>
           </div>
           <div className="mt-10 grid gap-3 sm:grid-cols-2">
@@ -73,13 +73,6 @@ export default async function HomePage() {
             ))}
           </div>
 
-          <div className="mt-8 max-w-xl rounded-[1.75rem] border border-white/15 bg-white/10 p-5 shadow-[0_22px_60px_-38px_rgba(255,255,255,0.35)] backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Warum Besucher hier schneller entscheiden können</p>
-            <p className="mt-3 text-sm leading-7 text-slate-100">
-              Statt sich Infos aus Posts, DMs und Umfragen zusammenzusuchen, sehen Interessierte hier den Ablauf, die
-              Stimmung, das nächste Camp und den direkten Weg zur Buchung.
-            </p>
-          </div>
         </div>
 
         <div className="space-y-6">

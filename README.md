@@ -39,7 +39,7 @@ Ein modernes MVP für wiederkehrende Cheercamps in St. Blasien mit:
 - Privates am Sonntag werden separat angefragt und bar direkt an den Coach gezahlt.
 - `/admin` ist per Basic Auth abgesichert, sobald mindestens ein gueltiges Admin-Zugangspaar gesetzt ist (`ADMIN_USERNAME` / `ADMIN_PASSWORD`, optional auch `_2` und `_3`).
 - Camp-Bilder koennen optional ueber Vercel Blob hochgeladen werden. Dafuer braucht das Projekt einen Public Blob Store und `BLOB_READ_WRITE_TOKEN`.
-- `Impressum`, `Datenschutz` und die Kontaktangaben enthalten noch Platzhalter und müssen vor Livegang ersetzt werden.
+- `Impressum`, `Datenschutz` und die Kontaktangaben sind gepflegt; vor Livegang trotzdem final inhaltlich pruefen.
 
 ## Lokales Setup
 1. Repository klonen
@@ -106,7 +106,7 @@ Hinweis: Der aktuelle Upload laeuft serverseitig. Einzelne Bilddateien sollten d
 
 ## Nächste sinnvolle Schritte
 - echtes Kontaktformular
-- echte rechtliche Texte
+- E-Mail-Bestaetigung nach Zahlung verfeinern
 - E-Mail-Bestätigung nach Zahlung
 - CSV-Export der Buchungen
 - Slots für Privates administrierbar machen

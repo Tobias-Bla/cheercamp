@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import type { PrivateOption } from '@/data/camps';
 import { deleteCampAction, updateCampAction } from '../../actions';
 import { readCampsFromFile } from '@/lib/camp-store';
+import { ScrollToTopOnMount } from '@/components/scroll-to-top-on-mount';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,6 +81,7 @@ export default async function EditCampPage({
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+      <ScrollToTopOnMount enabled={Boolean(query.saved || query.deleteError)} />
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Admin</p>
