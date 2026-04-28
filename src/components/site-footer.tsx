@@ -24,7 +24,7 @@ export function SiteFooter() {
           <p className="font-semibold text-white">Rechtliches</p>
           <div className="mt-3 flex flex-col gap-2">
             <Link href="/ueber-uns" className="transition hover:text-white">
-              Über Uns
+              Über uns
             </Link>
             <Link href="/impressionen" className="transition hover:text-white">
               Impressionen

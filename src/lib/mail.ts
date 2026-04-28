@@ -26,14 +26,14 @@ export async function sendPasswordResetEmail({ to, resetUrl }: SendPasswordReset
     body: JSON.stringify({
       from,
       to,
-      subject: 'Passwort fuer dein Cheercamp-Konto zuruecksetzen',
+      subject: 'Passwort für dein Cheercamp-Konto zurücksetzen',
       html: `
         <p>Hallo,</p>
-        <p>du hast angefragt, dein Passwort fuer dein Cheercamp-Konto zurueckzusetzen.</p>
+        <p>du hast angefragt, dein Passwort für dein Cheercamp-Konto zurückzusetzen.</p>
         <p><a href="${resetUrl}">Neues Passwort setzen</a></p>
-        <p>Der Link ist 60 Minuten gueltig. Wenn du das nicht warst, kannst du diese E-Mail ignorieren.</p>
+        <p>Der Link ist 60 Minuten gültig. Wenn du das nicht warst, kannst du diese E-Mail ignorieren.</p>
       `,
-      text: `Hallo,\n\nueber diesen Link kannst du dein Cheercamp-Passwort zuruecksetzen:\n${resetUrl}\n\nDer Link ist 60 Minuten gueltig. Wenn du das nicht warst, kannst du diese E-Mail ignorieren.`,
+      text: `Hallo,\n\nüber diesen Link kannst du dein Cheercamp-Passwort zurücksetzen:\n${resetUrl}\n\nDer Link ist 60 Minuten gültig. Wenn du das nicht warst, kannst du diese E-Mail ignorieren.`,
     }),
   });
 

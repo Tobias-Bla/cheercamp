@@ -27,7 +27,7 @@ export default async function LoginPage({
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Mein Konto</p>
         <h1 className="mt-3 text-4xl font-semibold text-white">Einloggen</h1>
         <p className="mt-3 text-sm leading-7 text-slate-300">
-          Melde dich an, um deine Buchungen zu sehen und deine Daten beim naechsten Camp schneller einzutragen.
+          Melde dich an, um deine Buchungen zu sehen und deine Daten beim nächsten Camp schneller einzutragen.
         </p>
 
         {message ? (

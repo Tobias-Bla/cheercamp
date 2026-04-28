@@ -136,10 +136,10 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
             name="stuntPartnerOrGroup"
             defaultValue={initialValues?.stuntPartnerOrGroup}
             className="field"
-            placeholder="Optional, nur als Info fuer die Orga. Jede Person bucht trotzdem einzeln."
+            placeholder="Optional, nur als Info für die Orga. Jede Person bucht trotzdem einzeln."
           />
           <p className="mt-2 text-xs leading-6 text-slate-400">
-            Dieser Eintrag ist nur zusaetzliche Orga-Info und ersetzt keine einzelnen Buchungen.
+            Dieser Eintrag ist nur zusätzliche Orga-Info und ersetzt keine einzelnen Buchungen.
           </p>
         </div>
       </div>

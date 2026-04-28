@@ -16,5 +16,5 @@ export function formatDate(dateInput: string | Date): string {
 }
 
 export function formatDateRange(startDate: string, endDate: string): string {
-  return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+  return `${formatDate(startDate)} - ${formatDate(endDate)}`;
 }

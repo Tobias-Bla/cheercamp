@@ -35,7 +35,7 @@ export default async function ResetPasswordPage({
 
         {!token ? (
           <div className="mt-6 rounded-2xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">
-            Der Reset-Link ist unvollstaendig. Fordere bitte einen neuen Link an.
+            Der Reset-Link ist unvollständig. Fordere bitte einen neuen Link an.
           </div>
         ) : (
           <form action={resetPasswordAction} className="mt-8 grid gap-5">

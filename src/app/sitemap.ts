@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getAllCamps } from '@/lib/camps';
+import { getAllCamps, isPublicCamp } from '@/lib/camps';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${siteUrl}${route}`,
   }));
 
-  for (const camp of await getAllCamps()) {
+  for (const camp of (await getAllCamps()).filter(isPublicCamp)) {
     entries.push({
       url: `${siteUrl}/camps/${camp.slug}`,
     });

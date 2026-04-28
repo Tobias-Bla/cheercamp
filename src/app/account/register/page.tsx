@@ -3,11 +3,11 @@ import { registerAction } from '@/app/account/actions';
 
 function getErrorMessage(error: string | undefined): string | null {
   if (error === 'exists') {
-    return 'Fuer diese E-Mail gibt es bereits ein Konto.';
+    return 'Für diese E-Mail gibt es bereits ein Konto.';
   }
 
   if (error === 'invalid') {
-    return 'Bitte gib eine gueltige E-Mail und ein Passwort mit mindestens 8 Zeichen ein.';
+    return 'Bitte gib eine gültige E-Mail und ein Passwort mit mindestens 8 Zeichen ein.';
   }
 
   return null;
@@ -27,7 +27,7 @@ export default async function RegisterPage({
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Mein Konto</p>
         <h1 className="mt-3 text-4xl font-semibold text-white">Konto erstellen</h1>
         <p className="mt-3 text-sm leading-7 text-slate-300">
-          Optionales Konto fuer schnellere Buchungen und eine Uebersicht deiner Anmeldungen.
+          Optionales Konto für schnellere Buchungen und eine Übersicht deiner Anmeldungen.
         </p>
 
         {errorMessage ? (

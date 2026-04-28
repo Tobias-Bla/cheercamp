@@ -27,7 +27,7 @@ export default async function BookingPage({
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-200">Buchung noch geschlossen</p>
           <h1 className="mt-3 text-3xl font-semibold text-white">{camp.title}</h1>
           <p className="mt-4 text-sm leading-7 text-slate-200">
-            Fuer dieses Camp steht das Datum noch nicht fest. Sobald der Termin fix ist, kann die Buchung hier direkt gestartet werden.
+            Für dieses Camp steht das Datum noch nicht fest. Sobald der Termin fix ist, kann die Buchung hier direkt gestartet werden.
           </p>
           <Link
             href={`/camps/${camp.slug}`}

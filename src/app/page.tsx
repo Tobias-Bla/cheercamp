@@ -7,9 +7,9 @@ import { homeMedia } from '@/data/media';
 
 const benefits = [
   'Buchung, Wunschthemen und Zahlung an einem Ort',
-  '35 Plaetze pro Camp in der Albtalhalle St. Blasien',
+  '35 Plätze pro Camp in der Albtalhalle St. Blasien',
   'Partnerstunt im Fokus, Groupstunts willkommen',
-  'Uebernachtung in der Halle inklusive',
+  'Übernachtung in der Halle inklusive',
 ];
 
 const flowItems = [
@@ -46,7 +46,7 @@ export default async function HomePage() {
           </div>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
             {siteConfig.claim} Besucher bekommen hier direkt einen klaren Einstieg: Was ist das Camp, welches Wochenende
-            ist als Naechstes relevant und wie fuehlt sich R.I.S.E. vor Ort an.
+            ist als Nächstes relevant und wie fühlt sich R.I.S.E. vor Ort an.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -74,10 +74,10 @@ export default async function HomePage() {
           </div>
 
           <div className="mt-8 max-w-xl rounded-[1.75rem] border border-white/15 bg-white/10 p-5 shadow-[0_22px_60px_-38px_rgba(255,255,255,0.35)] backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Warum Besucher hier schneller entscheiden koennen</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">Warum Besucher hier schneller entscheiden können</p>
             <p className="mt-3 text-sm leading-7 text-slate-100">
               Statt sich Infos aus Posts, DMs und Umfragen zusammenzusuchen, sehen Interessierte hier den Ablauf, die
-              Stimmung, das naechste Camp und den direkten Weg zur Buchung.
+              Stimmung, das nächste Camp und den direkten Weg zur Buchung.
             </p>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default async function HomePage() {
               <p className="mt-2 text-sm leading-6 text-slate-200">
                 {primaryCamp?.bookingOpen
                   ? 'General Camp online reservieren und bezahlen. Privates am Sonntag bleiben flexibel als Zusatzanfrage.'
-                  : 'Das naechste Cheercamp in St. Blasien mit Kai und Vio zum Specialpreis wird erst nach finaler Terminankuendigung freigeschaltet.'}
+                  : 'Das nächste Cheercamp in St. Blasien mit Kai und Vio zum Specialpreis wird erst nach finaler Terminankündigung freigeschaltet.'}
               </p>
             </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -156,7 +156,7 @@ export default async function HomePage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Aktuell buchbar</p>
                 <p className="mt-2 text-lg font-semibold text-white">{bookableCamp.title}</p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Wer nicht auf die naechste Terminankuendigung warten will, kann direkt zum aktuellen Buchungsflow gehen.
+                  Wer nicht auf die nächste Terminankündigung warten will, kann direkt zum aktuellen Buchungsflow gehen.
                 </p>
                 <Link
                   href={`/book/${bookableCamp.slug}`}
@@ -199,7 +199,7 @@ export default async function HomePage() {
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">Impressionen</p>
             <h2 className="mt-2 text-3xl font-semibold text-white">Bilder bekommen jetzt einen eigenen Platz</h2>
             <p className="mt-4 text-base leading-7 text-slate-300">
-              Statt die Startseite mit zu vielen Fotos zu ueberladen, fuehrt der neue Bereich Impressionen Besucher
+              Statt die Startseite mit zu vielen Fotos zu überladen, führt der neue Bereich Impressionen Besucher
               gezielt in Halle, Stimmung, Community und Training hinein.
             </p>
             <div className="mt-6 flex flex-wrap gap-4">

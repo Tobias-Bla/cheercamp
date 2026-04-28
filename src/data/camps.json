@@ -193,12 +193,12 @@
       }
     ],
     "featured": true,
-    "bookingOpen": true
+    "bookingOpen": false
   },
   {
     "slug": "testcamp",
     "title": "testcamp",
-    "subtitle": "Testcamp fuer eine Live-Zahlung mit Stripe.",
+    "subtitle": "Testcamp für eine Live-Zahlung mit Stripe.",
     "location": "St. Blasien",
     "venue": "Albtalhalle, St. Blasien",
     "startDate": null,
@@ -238,7 +238,7 @@
       {
         "day": "Test",
         "title": "Stripe Live-Test",
-        "details": ["Dieses Camp ist nur fuer eine kurze Live-Testzahlung gedacht."]
+        "details": ["Dieses Camp ist nur für eine kurze Live-Testzahlung gedacht."]
       }
     ],
     "featured": false,

@@ -265,10 +265,6 @@ async function deleteCampAction(formData: FormData): Promise<void> {
     redirect('/admin/camps?deleteError=confirm');
   }
 
-  if (getSeedCampBySlug(slug)) {
-    redirect('/admin/camps?deleteError=seed');
-  }
-
   await deleteManagedCamp(slug);
 
   revalidatePath('/');
@@ -284,15 +280,11 @@ async function deleteCampAction(formData: FormData): Promise<void> {
 
 function getDeleteErrorMessage(error: string | undefined): string | null {
   if (error === 'confirm') {
-    return 'Bitte bestaetige das Loeschen zuerst.';
-  }
-
-  if (error === 'seed') {
-    return 'Seed-Camps koennen nicht im Admin geloescht werden, weil sie sonst aus den Seed-Daten wieder erscheinen.';
+    return 'Bitte bestätige das Löschen zuerst.';
   }
 
   if (error) {
-    return 'Camp konnte nicht geloescht werden.';
+    return 'Camp konnte nicht gelöscht werden.';
   }
 
   return null;
@@ -359,11 +351,11 @@ function CampForm({
             <input name="priceCents" type="number" defaultValue={camp.priceCents} className="field mt-2" />
           </label>
           <label className="text-sm text-slate-200">
-            Kapazitaet
+            Kapazität
             <input name="capacity" type="number" defaultValue={camp.capacity} className="field mt-2" />
           </label>
           <label className="text-sm text-slate-200">
-            Kapazitaetstext
+            Kapazitätstext
             <input name="capacityText" defaultValue={camp.capacityText} className="field mt-2" />
           </label>
           <label className="text-sm text-slate-200">
@@ -576,20 +568,20 @@ function CampForm({
           <input type="hidden" name="slug" value={camp.slug} />
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-rose-100">Camp loeschen</h3>
+              <h3 className="text-lg font-semibold text-rose-100">Camp löschen</h3>
               <p className="mt-2 text-sm leading-6 text-rose-100/80">
-                Entfernt dieses Camp aus der Datenbank, der Camp-Uebersicht und der Buchungsstrecke.
+                Entfernt dieses Camp aus der Datenbank, der Camp-Übersicht und der Buchungsstrecke.
               </p>
               <label className="mt-4 flex items-center gap-3 text-sm text-rose-50">
                 <input name="confirmDelete" type="checkbox" className="h-4 w-4 accent-rose-300" />
-                Loeschen bestaetigen
+                Löschen bestätigen
               </label>
             </div>
             <button
               type="submit"
               className="rounded-full bg-rose-300 px-5 py-3 text-sm font-semibold text-rose-950 transition hover:bg-rose-200"
             >
-              Camp loeschen
+              Camp löschen
             </button>
           </div>
         </form>
@@ -679,7 +671,7 @@ export default async function AdminCampsPage({
 
       {deleted ? (
         <div className="mb-8 rounded-[2rem] border border-emerald-400/25 bg-emerald-400/10 px-6 py-4 text-sm text-emerald-100">
-          Camp wurde geloescht.
+          Camp wurde gelöscht.
         </div>
       ) : null}
 
@@ -717,7 +709,7 @@ export default async function AdminCampsPage({
             }
             actionLabel="Änderungen speichern"
             blobUploadsEnabled={blobUploadsEnabled}
-            canDelete={camp.managedInDb && !getSeedCampBySlug(camp.slug)}
+            canDelete
           />
         ))}
       </div>

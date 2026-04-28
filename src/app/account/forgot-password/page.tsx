@@ -14,7 +14,7 @@ export default async function ForgotPasswordPage({
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Mein Konto</p>
         <h1 className="mt-3 text-4xl font-semibold text-white">Passwort vergessen</h1>
         <p className="mt-3 text-sm leading-7 text-slate-300">
-          Gib deine E-Mail ein. Falls ein Konto existiert, schicken wir dir einen Link zum Zuruecksetzen.
+          Gib deine E-Mail ein. Falls ein Konto existiert, schicken wir dir einen Link zum Zurücksetzen.
         </p>
 
         {sent ? (

@@ -21,7 +21,7 @@ export default async function AccountPage({
           <h1 className="mt-3 text-4xl font-semibold text-white">Optional registrieren</h1>
           <p className="mt-4 text-sm leading-7 text-slate-300">
             Du kannst weiterhin ohne Konto buchen. Mit Konto siehst du deine Buchungen gesammelt und kannst deine Daten
-            fuer spaetere Camps speichern.
+            für spätere Camps speichern.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/account/register" className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950">
@@ -61,7 +61,7 @@ export default async function AccountPage({
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">Mein Konto</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">Hallo{currentUser.profile.name ? `, ${currentUser.profile.name}` : ''}</h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-            Hier findest du deine Buchungen und kannst Daten speichern, die beim naechsten Formular vorausgefuellt werden.
+            Hier findest du deine Buchungen und kannst Daten speichern, die beim nächsten Formular vorausgefüllt werden.
           </p>
         </div>
         <form action={logoutAction}>
@@ -134,7 +134,7 @@ export default async function AccountPage({
               <input name="stuntPartnerOrGroup" defaultValue={currentUser.profile.stuntPartnerOrGroup} className="field mt-2" />
             </label>
             <label className="text-sm text-slate-200 md:col-span-2">
-              Allergien / Unvertraeglichkeiten
+              Allergien / Unverträglichkeiten
               <textarea name="allergies" defaultValue={currentUser.profile.allergies} rows={3} className="field mt-2 min-h-28" />
             </label>
             <label className="text-sm text-slate-200 md:col-span-2">
@@ -152,7 +152,7 @@ export default async function AccountPage({
           <div className="mt-6 grid gap-4">
             {bookings.length === 0 ? (
               <div className="rounded-2xl border border-white/10 bg-slate-950/30 p-5 text-sm leading-7 text-slate-300">
-                Noch keine Buchung fuer dieses Konto gefunden.
+                Noch keine Buchung für dieses Konto gefunden.
               </div>
             ) : (
               bookings.map((booking) => (

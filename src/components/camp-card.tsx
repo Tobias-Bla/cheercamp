@@ -18,6 +18,15 @@ export function CampCard({ camp }: { camp: Camp }) {
         <div className="absolute left-5 top-5 rounded-full border border-white/15 bg-slate-950/70 px-3 py-1 text-xs font-medium text-slate-100 backdrop-blur">
           {camp.capacityText}
         </div>
+        <div
+          className={`absolute right-5 top-5 rounded-full border px-3 py-1 text-xs font-semibold backdrop-blur ${
+            camp.bookingOpen
+              ? 'border-emerald-300/25 bg-emerald-300/15 text-emerald-100'
+              : 'border-amber-300/25 bg-amber-300/15 text-amber-100'
+          }`}
+        >
+          {camp.bookingOpen ? 'Buchung offen' : 'Buchung geschlossen'}
+        </div>
         <div className="absolute bottom-5 left-5 right-5">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-fuchsia-300">{camp.location}</p>
           <h3 className="mt-2 text-2xl font-semibold text-white">{camp.title}</h3>
@@ -69,7 +78,7 @@ export function CampCard({ camp }: { camp: Camp }) {
             </Link>
           ) : (
             <span className="rounded-full border border-amber-300/25 bg-amber-300/10 px-4 py-2 text-sm font-semibold text-amber-100">
-              Buchung folgt nach Terminankuendigung
+              Noch nicht buchbar
             </span>
           )}
         </div>

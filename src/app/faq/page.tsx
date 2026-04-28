@@ -2,7 +2,7 @@
   {
     question: 'Was ist im Preis enthalten?',
     answer:
-      'Der Online-Preis gilt fuer das General Camp am Samstag und deckt je nach Camp Halle, Coach und die Uebernachtung in der Halle ab. Verpflegung ist nicht enthalten.',
+      'Der Online-Preis gilt für das General Camp am Samstag und deckt je nach Camp Halle, Coach und die Übernachtung in der Halle ab. Verpflegung ist nicht enthalten.',
   },
   {
     question: 'Kann ich schon buchen, wenn noch kein Datum feststeht?',
@@ -12,7 +12,7 @@
   {
     question: 'Wann findet das General Camp statt?',
     answer:
-      'Freitags ist eine optionale Anreise ab 15:00 Uhr moeglich. Samstags findet das allgemeine Camp immer von 12:00 bis 18:00 Uhr statt. Je nach Coach gibt es einen genauen Zeitplan oder ein freieres Wunschformat.',
+      'Freitags ist eine optionale Anreise ab 15:00 Uhr möglich. Samstags findet das allgemeine Camp immer von 12:00 bis 18:00 Uhr statt. Je nach Coach gibt es einen genauen Zeitplan oder ein freieres Wunschformat.',
   },
   {
     question: 'Für wen ist das Camp gedacht?',
@@ -27,7 +27,7 @@
   {
     question: 'Wie funktionieren die Privates am Sonntag?',
     answer:
-      'Privates koennen fuer Pairs in Partnerstunts oder Groupstunts angefragt werden. Ausserdem sind Einzel-Sessions mit direktem Stunten mit dem Coach moeglich. Diese Privates werden separat und bar direkt an den Coach gezahlt.',
+      'Privates können für Pairs in Partnerstunts oder Groupstunts angefragt werden. Außerdem sind Einzel-Sessions mit direktem Stunten mit dem Coach möglich. Diese Privates werden separat und bar direkt an den Coach gezahlt.',
   },
   {
     question: 'Wann ist eine Buchung verbindlich?',

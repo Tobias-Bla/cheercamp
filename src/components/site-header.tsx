@@ -7,7 +7,7 @@ import { getCurrentUser } from '@/lib/auth';
 const navigationItems = [
   { href: '/', label: 'Start' },
   { href: '/camps', label: 'Camps' },
-  { href: '/ueber-uns', label: 'Über Uns' },
+  { href: '/ueber-uns', label: 'Über uns' },
   { href: '/impressionen', label: 'Impressionen' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Kontakt' },
@@ -48,20 +48,12 @@ export async function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href="/account"
-            className="hidden rounded-full border border-white/15 px-4 py-3 text-sm font-semibold text-white transition hover:border-cyan-300 hover:text-cyan-200 sm:inline-flex"
-          >
-            {currentUser ? 'Mein Konto' : 'Login'}
-          </Link>
-          <Link
-            href="/camps"
-            className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-[0_16px_35px_-22px_rgba(255,255,255,0.85)] transition hover:bg-slate-100"
-          >
-            Jetzt buchen
-          </Link>
-        </div>
+        <Link
+          href="/account"
+          className="hidden rounded-full border border-white/15 px-4 py-3 text-sm font-semibold text-white transition hover:border-cyan-300 hover:text-cyan-200 sm:inline-flex"
+        >
+          {currentUser ? 'Mein Konto' : 'Login'}
+        </Link>
       </div>
     </header>
   );

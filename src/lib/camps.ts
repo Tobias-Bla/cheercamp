@@ -34,11 +34,18 @@ type ManagedCampRow = {
   schedule: Prisma.JsonValue;
   featured: boolean;
   booking_open: boolean;
+  deleted_at: Date | null;
 };
 
 export type AdminCamp = Camp & {
   managedInDb: boolean;
 };
+
+const internalCampSlugs = new Set(['testcamp']);
+
+export function isPublicCamp(camp: Pick<Camp, 'slug'>): boolean {
+  return !internalCampSlugs.has(camp.slug);
+}
 
 function isString(value: unknown): value is string {
   return typeof value === 'string';
@@ -172,6 +179,55 @@ function mapManagedCampRow(row: ManagedCampRow, fallback?: Camp): Camp {
 
 async function getManagedCampRows(): Promise<ManagedCampRow[]> {
   const prisma = getPrismaClient();
+  const [{ exists: hasDeletedAtColumn } = { exists: false }] = await prisma.$queryRaw<Array<{ exists: boolean }>>(Prisma.sql`
+    SELECT EXISTS (
+      SELECT 1
+      FROM information_schema.columns
+      WHERE table_schema = 'public'
+        AND table_name = 'managed_camps'
+        AND column_name = 'deleted_at'
+    ) AS "exists"
+  `);
+
+  if (hasDeletedAtColumn) {
+    return prisma.$queryRaw<ManagedCampRow[]>(Prisma.sql`
+      SELECT
+        "slug",
+        "title",
+        "subtitle",
+        "location",
+        "venue",
+        "start_date",
+        "end_date",
+        "date_label",
+        "price_cents",
+        "capacity",
+        "capacity_text",
+        "ages",
+        "level",
+        "coaches",
+        "coach_mode_label",
+        "format_options",
+        "general_camp_time",
+        "overnight_included",
+        "private_available",
+        "private_payment_note",
+        "cover_image",
+        "cover_image_alt",
+        "booking_image",
+        "booking_image_alt",
+        "gallery",
+        "private_options",
+        "focus",
+        "highlights",
+        "schedule",
+        "featured",
+        "booking_open",
+        "deleted_at"
+      FROM "public"."managed_camps"
+      ORDER BY "featured" DESC, "start_date" ASC NULLS LAST, "created_at" DESC
+    `);
+  }
 
   return prisma.$queryRaw<ManagedCampRow[]>(Prisma.sql`
     SELECT
@@ -205,7 +261,8 @@ async function getManagedCampRows(): Promise<ManagedCampRow[]> {
       "highlights",
       "schedule",
       "featured",
-      "booking_open"
+      "booking_open",
+      NULL::timestamp AS "deleted_at"
     FROM "public"."managed_camps"
     ORDER BY "featured" DESC, "start_date" ASC NULLS LAST, "created_at" DESC
   `);
@@ -218,6 +275,11 @@ export async function getAllCamps(): Promise<Camp[]> {
     const managedCamps = await getManagedCampRows();
 
     for (const row of managedCamps) {
+      if (row.deleted_at) {
+        mergedCamps.delete(row.slug);
+        continue;
+      }
+
       mergedCamps.set(row.slug, mapManagedCampRow(row, mergedCamps.get(row.slug)));
     }
   } catch {
@@ -272,6 +334,11 @@ export async function getAdminCamps(): Promise<AdminCamp[]> {
     const managedRows = await getManagedCampRows();
 
     for (const row of managedRows) {
+      if (row.deleted_at) {
+        mergedCamps.delete(row.slug);
+        continue;
+      }
+
       managedSlugs.add(row.slug);
       mergedCamps.set(row.slug, {
         ...mapManagedCampRow(row, defaultCampMap.get(row.slug)),
@@ -359,6 +426,7 @@ export async function upsertManagedCamp(input: ManagedCampInput): Promise<void> 
       "schedule",
       "featured",
       "booking_open",
+      "deleted_at",
       "updated_at"
     )
     VALUES (
@@ -394,6 +462,7 @@ export async function upsertManagedCamp(input: ManagedCampInput): Promise<void> 
       ${JSON.stringify(input.schedule)}::jsonb,
       ${input.featured},
       ${input.bookingOpen},
+      NULL,
       NOW()
     )
     ON CONFLICT ("slug") DO UPDATE SET
@@ -427,12 +496,95 @@ export async function upsertManagedCamp(input: ManagedCampInput): Promise<void> 
       "schedule" = EXCLUDED."schedule",
       "featured" = EXCLUDED."featured",
       "booking_open" = EXCLUDED."booking_open",
+      "deleted_at" = NULL,
       "updated_at" = NOW()
   `);
 }
 
 export async function deleteManagedCamp(slug: string): Promise<void> {
   const prisma = getPrismaClient();
+  const defaultCamp = defaultCamps.find((camp) => camp.slug === slug);
+
+  if (defaultCamp) {
+    await prisma.$executeRaw(Prisma.sql`
+      INSERT INTO "public"."managed_camps" (
+        "id",
+        "slug",
+        "title",
+        "subtitle",
+        "location",
+        "venue",
+        "start_date",
+        "end_date",
+        "date_label",
+        "price_cents",
+        "capacity",
+        "capacity_text",
+        "ages",
+        "level",
+        "coaches",
+        "coach_mode_label",
+        "format_options",
+        "general_camp_time",
+        "overnight_included",
+        "private_available",
+        "private_payment_note",
+        "cover_image",
+        "cover_image_alt",
+        "booking_image",
+        "booking_image_alt",
+        "gallery",
+        "private_options",
+        "focus",
+        "highlights",
+        "schedule",
+        "featured",
+        "booking_open",
+        "deleted_at",
+        "updated_at"
+      )
+      VALUES (
+        ${crypto.randomUUID()},
+        ${defaultCamp.slug},
+        ${defaultCamp.title},
+        ${defaultCamp.subtitle},
+        ${defaultCamp.location},
+        ${defaultCamp.venue},
+        ${defaultCamp.startDate ? new Date(defaultCamp.startDate) : null},
+        ${defaultCamp.endDate ? new Date(defaultCamp.endDate) : null},
+        ${defaultCamp.dateLabel ?? null},
+        ${defaultCamp.priceCents},
+        ${defaultCamp.capacity},
+        ${defaultCamp.capacityText},
+        ${defaultCamp.ages},
+        ${defaultCamp.level},
+        ${JSON.stringify(defaultCamp.coaches)}::jsonb,
+        ${defaultCamp.coachModeLabel},
+        ${JSON.stringify(defaultCamp.formatOptions)}::jsonb,
+        ${defaultCamp.generalCampTime},
+        ${defaultCamp.overnightIncluded},
+        ${defaultCamp.privateAvailable},
+        ${defaultCamp.privatePaymentNote},
+        ${defaultCamp.coverImage},
+        ${defaultCamp.coverImageAlt},
+        ${defaultCamp.bookingImage},
+        ${defaultCamp.bookingImageAlt},
+        ${JSON.stringify(defaultCamp.gallery)}::jsonb,
+        ${JSON.stringify(defaultCamp.privateOptions)}::jsonb,
+        ${JSON.stringify(defaultCamp.focus)}::jsonb,
+        ${JSON.stringify(defaultCamp.highlights)}::jsonb,
+        ${JSON.stringify(defaultCamp.schedule)}::jsonb,
+        ${defaultCamp.featured},
+        ${defaultCamp.bookingOpen},
+        NOW(),
+        NOW()
+      )
+      ON CONFLICT ("slug") DO UPDATE SET
+        "deleted_at" = NOW(),
+        "updated_at" = NOW()
+    `);
+    return;
+  }
 
   await prisma.$executeRaw(Prisma.sql`
     DELETE FROM "public"."managed_camps"
