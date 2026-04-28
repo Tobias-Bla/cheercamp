@@ -30,7 +30,7 @@ export const homeMedia = {
     },
     {
       src: '/images/coach-kai-dog.webp',
-      alt: 'Coach Kai sitzt entspannt mit einem kleinen Hund in der Halle.',
+      alt: 'Coach Tony Castro sitzt entspannt mit einem kleinen Hund in der Halle.',
     },
   ],
 } as const satisfies Record<string, MediaAsset | MediaAsset[]>;
