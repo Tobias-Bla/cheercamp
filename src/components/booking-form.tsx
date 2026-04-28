@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import type { Camp } from '@/data/camps';
+import type { AccountProfile } from '@/lib/auth';
 
 type SubmitState = {
   error: string | null;
@@ -12,11 +13,14 @@ function getBooleanValue(formData: FormData, key: string): boolean {
   return formData.get(key) === 'on';
 }
 
-export function BookingForm({ camp }: { camp: Camp }) {
+export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues?: AccountProfile }) {
   const [submitState, setSubmitState] = useState<SubmitState>({
     error: null,
     loading: false,
   });
+  const contactName =
+    initialValues?.name ||
+    [initialValues?.participantFirstName, initialValues?.participantLastName].filter(Boolean).join(' ');
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -81,19 +85,19 @@ export function BookingForm({ camp }: { camp: Camp }) {
           <label htmlFor="participantFirstName" className="mb-2 block text-sm font-medium text-slate-200">
             Vorname Teilnehmer*in
           </label>
-          <input id="participantFirstName" name="participantFirstName" required className="field" />
+          <input id="participantFirstName" name="participantFirstName" required defaultValue={initialValues?.participantFirstName} className="field" />
         </div>
         <div>
           <label htmlFor="participantLastName" className="mb-2 block text-sm font-medium text-slate-200">
             Nachname Teilnehmer*in
           </label>
-          <input id="participantLastName" name="participantLastName" required className="field" />
+          <input id="participantLastName" name="participantLastName" required defaultValue={initialValues?.participantLastName} className="field" />
         </div>
         <div>
           <label htmlFor="participantBirthDate" className="mb-2 block text-sm font-medium text-slate-200">
             Geburtsdatum
           </label>
-          <input id="participantBirthDate" name="participantBirthDate" type="date" required className="field" />
+          <input id="participantBirthDate" name="participantBirthDate" type="date" required defaultValue={initialValues?.participantBirthDate} className="field" />
         </div>
         <div>
           <label htmlFor="experienceLevel" className="mb-2 block text-sm font-medium text-slate-200">
@@ -121,7 +125,7 @@ export function BookingForm({ camp }: { camp: Camp }) {
           <label htmlFor="teamName" className="mb-2 block text-sm font-medium text-slate-200">
             Teamname (optional)
           </label>
-          <input id="teamName" name="teamName" className="field" />
+          <input id="teamName" name="teamName" defaultValue={initialValues?.teamName} className="field" />
         </div>
         <div className="sm:col-span-2">
           <label htmlFor="stuntPartnerOrGroup" className="mb-2 block text-sm font-medium text-slate-200">
@@ -130,6 +134,7 @@ export function BookingForm({ camp }: { camp: Camp }) {
           <input
             id="stuntPartnerOrGroup"
             name="stuntPartnerOrGroup"
+            defaultValue={initialValues?.stuntPartnerOrGroup}
             className="field"
             placeholder="Optional, nur als Info fuer die Orga. Jede Person bucht trotzdem einzeln."
           />
@@ -144,25 +149,25 @@ export function BookingForm({ camp }: { camp: Camp }) {
           <label htmlFor="contactName" className="mb-2 block text-sm font-medium text-slate-200">
             Name Kontaktperson
           </label>
-          <input id="contactName" name="contactName" required className="field" />
+          <input id="contactName" name="contactName" required defaultValue={contactName} className="field" />
         </div>
         <div>
           <label htmlFor="contactEmail" className="mb-2 block text-sm font-medium text-slate-200">
             E-Mail
           </label>
-          <input id="contactEmail" name="contactEmail" type="email" required className="field" />
+          <input id="contactEmail" name="contactEmail" type="email" required defaultValue={initialValues?.email} className="field" />
         </div>
         <div>
           <label htmlFor="contactPhone" className="mb-2 block text-sm font-medium text-slate-200">
             Telefonnummer
           </label>
-          <input id="contactPhone" name="contactPhone" required className="field" />
+          <input id="contactPhone" name="contactPhone" required defaultValue={initialValues?.contactPhone} className="field" />
         </div>
         <div>
           <label htmlFor="participantMobile" className="mb-2 block text-sm font-medium text-slate-200">
             Handynummer Teilnehmer*in
           </label>
-          <input id="participantMobile" name="participantMobile" required className="field" />
+          <input id="participantMobile" name="participantMobile" required defaultValue={initialValues?.participantMobile} className="field" />
         </div>
       </div>
 
@@ -171,13 +176,13 @@ export function BookingForm({ camp }: { camp: Camp }) {
           <label htmlFor="emergencyContactName" className="mb-2 block text-sm font-medium text-slate-200">
             Notfallkontakt Name
           </label>
-          <input id="emergencyContactName" name="emergencyContactName" required className="field" />
+          <input id="emergencyContactName" name="emergencyContactName" required defaultValue={initialValues?.emergencyContactName} className="field" />
         </div>
         <div>
           <label htmlFor="emergencyContactPhone" className="mb-2 block text-sm font-medium text-slate-200">
             Notfallkontakt Telefon
           </label>
-          <input id="emergencyContactPhone" name="emergencyContactPhone" required className="field" />
+          <input id="emergencyContactPhone" name="emergencyContactPhone" required defaultValue={initialValues?.emergencyContactPhone} className="field" />
         </div>
       </div>
 
@@ -211,13 +216,13 @@ export function BookingForm({ camp }: { camp: Camp }) {
           <label htmlFor="allergies" className="mb-2 block text-sm font-medium text-slate-200">
             Allergien / Unverträglichkeiten
           </label>
-          <textarea id="allergies" name="allergies" rows={3} className="field min-h-28" />
+          <textarea id="allergies" name="allergies" rows={3} defaultValue={initialValues?.allergies} className="field min-h-28" />
         </div>
         <div>
           <label htmlFor="notes" className="mb-2 block text-sm font-medium text-slate-200">
             Sonstige Hinweise
           </label>
-          <textarea id="notes" name="notes" rows={4} className="field min-h-32" />
+          <textarea id="notes" name="notes" rows={4} defaultValue={initialValues?.notes} className="field min-h-32" />
         </div>
       </div>
 

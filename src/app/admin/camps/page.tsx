@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { camps as seededCamps, type Camp } from '@/data/camps';
 import { CAMP_IMAGE_ACCEPT, isBlobUploadEnabled, uploadCampImage } from '@/lib/blob';
-import { getAdminCamps, upsertManagedCamp, type ManagedCampInput } from '@/lib/camps';
+import { deleteManagedCamp, getAdminCamps, upsertManagedCamp, type ManagedCampInput } from '@/lib/camps';
 
 export const dynamic = 'force-dynamic';
 
@@ -251,18 +251,67 @@ async function saveCampAction(formData: FormData): Promise<void> {
   redirect('/admin/camps?saved=1');
 }
 
+async function deleteCampAction(formData: FormData): Promise<void> {
+  'use server';
+
+  const slug = String(formData.get('slug') ?? '').trim();
+  const confirmed = formData.get('confirmDelete') === 'on';
+
+  if (!slug) {
+    redirect('/admin/camps?deleteError=missing');
+  }
+
+  if (!confirmed) {
+    redirect('/admin/camps?deleteError=confirm');
+  }
+
+  if (getSeedCampBySlug(slug)) {
+    redirect('/admin/camps?deleteError=seed');
+  }
+
+  await deleteManagedCamp(slug);
+
+  revalidatePath('/');
+  revalidatePath('/camps');
+  revalidatePath('/impressionen');
+  revalidatePath('/admin/camps');
+  revalidatePath('/admin/bookings');
+  revalidatePath(`/camps/${slug}`);
+  revalidatePath(`/book/${slug}`);
+
+  redirect('/admin/camps?deleted=1');
+}
+
+function getDeleteErrorMessage(error: string | undefined): string | null {
+  if (error === 'confirm') {
+    return 'Bitte bestaetige das Loeschen zuerst.';
+  }
+
+  if (error === 'seed') {
+    return 'Seed-Camps koennen nicht im Admin geloescht werden, weil sie sonst aus den Seed-Daten wieder erscheinen.';
+  }
+
+  if (error) {
+    return 'Camp konnte nicht geloescht werden.';
+  }
+
+  return null;
+}
+
 function CampForm({
   camp,
   heading,
   description,
   actionLabel,
   blobUploadsEnabled,
+  canDelete = false,
 }: {
   camp: Camp;
   heading: string;
   description: string;
   actionLabel: string;
   blobUploadsEnabled: boolean;
+  canDelete?: boolean;
 }) {
   return (
     <article className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
@@ -521,6 +570,30 @@ function CampForm({
           {actionLabel}
         </button>
       </form>
+
+      {canDelete ? (
+        <form action={deleteCampAction} className="mt-6 rounded-[1.5rem] border border-rose-400/25 bg-rose-400/10 p-5">
+          <input type="hidden" name="slug" value={camp.slug} />
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-rose-100">Camp loeschen</h3>
+              <p className="mt-2 text-sm leading-6 text-rose-100/80">
+                Entfernt dieses Camp aus der Datenbank, der Camp-Uebersicht und der Buchungsstrecke.
+              </p>
+              <label className="mt-4 flex items-center gap-3 text-sm text-rose-50">
+                <input name="confirmDelete" type="checkbox" className="h-4 w-4 accent-rose-300" />
+                Loeschen bestaetigen
+              </label>
+            </div>
+            <button
+              type="submit"
+              className="rounded-full bg-rose-300 px-5 py-3 text-sm font-semibold text-rose-950 transition hover:bg-rose-200"
+            >
+              Camp loeschen
+            </button>
+          </div>
+        </form>
+      ) : null}
     </article>
   );
 }
@@ -564,11 +637,12 @@ function createBlankCamp(): Camp {
 export default async function AdminCampsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ saved?: string }>;
+  searchParams: Promise<{ saved?: string; deleted?: string; deleteError?: string }>;
 }) {
   const camps = await getAdminCamps();
-  const { saved } = await searchParams;
+  const { saved, deleted, deleteError } = await searchParams;
   const blobUploadsEnabled = isBlobUploadEnabled();
+  const deleteErrorMessage = getDeleteErrorMessage(deleteError);
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
@@ -603,6 +677,18 @@ export default async function AdminCampsPage({
         </div>
       ) : null}
 
+      {deleted ? (
+        <div className="mb-8 rounded-[2rem] border border-emerald-400/25 bg-emerald-400/10 px-6 py-4 text-sm text-emerald-100">
+          Camp wurde geloescht.
+        </div>
+      ) : null}
+
+      {deleteErrorMessage ? (
+        <div className="mb-8 rounded-[2rem] border border-amber-400/25 bg-amber-400/10 px-6 py-4 text-sm text-amber-100">
+          {deleteErrorMessage}
+        </div>
+      ) : null}
+
       <div className="mb-8 rounded-[2rem] border border-white/10 bg-slate-950/30 px-6 py-4 text-sm leading-7 text-slate-300">
         {blobUploadsEnabled
           ? 'Bild-Uploads sind aktiv. Neue Dateien werden dauerhaft in Vercel Blob gespeichert und danach auf der Website angezeigt.'
@@ -616,6 +702,7 @@ export default async function AdminCampsPage({
           description="Wenn der Slug neu ist, wird ein neues Camp erzeugt. Wenn der Slug schon existiert, wird der vorhandene Datensatz überschrieben."
           actionLabel="Camp speichern"
           blobUploadsEnabled={blobUploadsEnabled}
+          canDelete={false}
         />
 
         {camps.map((camp) => (
@@ -630,6 +717,7 @@ export default async function AdminCampsPage({
             }
             actionLabel="Änderungen speichern"
             blobUploadsEnabled={blobUploadsEnabled}
+            canDelete={camp.managedInDb && !getSeedCampBySlug(camp.slug)}
           />
         ))}
       </div>

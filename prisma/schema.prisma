@@ -36,6 +36,8 @@ enum PrivateInterest {
 
 model Booking {
   id                      String           @id @default(cuid())
+  userId                  String?          @map("user_id")
+  user                    User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
   status                  BookingStatus    @default(PENDING)
   campSlug                String           @map("camp_slug")
   campTitle               String           @map("camp_title")
@@ -72,7 +74,45 @@ model Booking {
   @@index([campSlug, createdAt])
   @@index([contactEmail])
   @@index([status])
+  @@index([userId])
   @@map("bookings")
+}
+
+model User {
+  id                    String        @id @default(cuid())
+  email                 String        @unique
+  passwordHash          String        @map("password_hash")
+  name                  String?
+  participantFirstName  String?       @map("participant_first_name")
+  participantLastName   String?       @map("participant_last_name")
+  participantBirthDate  DateTime?     @map("participant_birth_date")
+  contactPhone          String?       @map("contact_phone")
+  participantMobile     String?       @map("participant_mobile")
+  emergencyContactName  String?       @map("emergency_contact_name")
+  emergencyContactPhone String?       @map("emergency_contact_phone")
+  teamName              String?       @map("team_name")
+  stuntPartnerOrGroup   String?       @map("stunt_partner_or_group")
+  allergies             String?       @db.Text
+  notes                 String?       @db.Text
+  bookings              Booking[]
+  sessions              UserSession[]
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model UserSession {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique @map("token_hash")
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("user_sessions")
 }
 
 model ManagedCamp {

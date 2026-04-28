@@ -111,7 +111,30 @@ function jsonToSchedule(value: Prisma.JsonValue, fallback: Camp['schedule']): Ca
   return isScheduleArray(value) ? value : fallback;
 }
 
+function normalizeGalleryImage(image: CampGalleryImage): CampGalleryImage {
+  if (image.src.endsWith('/coach-kai-dog.webp')) {
+    return {
+      ...image,
+      alt: 'Coach Tony Castro sitzt entspannt mit einem kleinen Hund in der Halle.',
+    };
+  }
+
+  if (image.src.endsWith('/coach-kai-action.webp')) {
+    return {
+      ...image,
+      alt: image.alt.replaceAll('Coach Kai', 'Coach Tony Castro'),
+    };
+  }
+
+  return image;
+}
+
 function mapManagedCampRow(row: ManagedCampRow, fallback?: Camp): Camp {
+  const bookingImageAlt =
+    row.booking_image.endsWith('/coach-kai-action.webp') || row.booking_image.endsWith('/coach-kai-dog.webp')
+      ? row.booking_image_alt.replaceAll('Coach Kai', 'Coach Tony Castro')
+      : row.booking_image_alt;
+
   return {
     slug: row.slug,
     title: row.title,
@@ -136,8 +159,8 @@ function mapManagedCampRow(row: ManagedCampRow, fallback?: Camp): Camp {
     coverImage: row.cover_image,
     coverImageAlt: row.cover_image_alt,
     bookingImage: row.booking_image,
-    bookingImageAlt: row.booking_image_alt,
-    gallery: jsonToGallery(row.gallery, fallback?.gallery ?? []),
+    bookingImageAlt,
+    gallery: jsonToGallery(row.gallery, fallback?.gallery ?? []).map(normalizeGalleryImage),
     privateOptions: jsonToPrivateOptions(row.private_options, fallback?.privateOptions ?? []),
     focus: jsonToStringArray(row.focus, fallback?.focus ?? []),
     highlights: jsonToStringArray(row.highlights, fallback?.highlights ?? []),
@@ -405,5 +428,14 @@ export async function upsertManagedCamp(input: ManagedCampInput): Promise<void> 
       "featured" = EXCLUDED."featured",
       "booking_open" = EXCLUDED."booking_open",
       "updated_at" = NOW()
+  `);
+}
+
+export async function deleteManagedCamp(slug: string): Promise<void> {
+  const prisma = getPrismaClient();
+
+  await prisma.$executeRaw(Prisma.sql`
+    DELETE FROM "public"."managed_camps"
+    WHERE "slug" = ${slug}
   `);
 }

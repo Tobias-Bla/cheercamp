@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BookingForm } from '@/components/booking-form';
+import { getCurrentUser } from '@/lib/auth';
 import { getCampBySlug } from '@/lib/camps';
 import { formatCurrency, formatDateRange } from '@/lib/format';
 
@@ -13,7 +14,7 @@ export default async function BookingPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const camp = await getCampBySlug(slug);
+  const [camp, currentUser] = await Promise.all([getCampBySlug(slug), getCurrentUser()]);
 
   if (!camp) {
     notFound();
@@ -95,7 +96,7 @@ export default async function BookingPage({
               Im Formular könnt ihr direkt angeben, ob ihr als Partnerstunt oder Groupstunt kommt, welche Wünsche ihr fürs Samstag-Camp habt und ob Interesse an einem Private am Sonntag besteht.
             </p>
           </div>
-          <BookingForm camp={camp} />
+          <BookingForm camp={camp} initialValues={currentUser?.profile} />
         </div>
       </div>
     </section>

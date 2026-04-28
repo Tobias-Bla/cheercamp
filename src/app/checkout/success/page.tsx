@@ -17,6 +17,9 @@ export default async function CheckoutSuccessPage({
           {bookingId ? ` Buchungs-ID: ${bookingId}` : ''}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link href="/account" className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white">
+            Meine Buchungen ansehen
+          </Link>
           <Link href="/camps" className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950">
             Weitere Camps ansehen
           </Link>

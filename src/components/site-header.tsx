@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { siteConfig } from '@/data/site-config';
 import { brandMedia } from '@/data/media';
+import { getCurrentUser } from '@/lib/auth';
 
 const navigationItems = [
   { href: '/', label: 'Start' },
@@ -12,7 +13,9 @@ const navigationItems = [
   { href: '/contact', label: 'Kontakt' },
 ];
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const currentUser = await getCurrentUser();
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 shadow-[0_10px_40px_-25px_rgba(15,23,42,0.85)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5 lg:px-8">
@@ -45,12 +48,20 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Link
-          href="/camps"
-          className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-[0_16px_35px_-22px_rgba(255,255,255,0.85)] transition hover:bg-slate-100"
-        >
-          Jetzt buchen
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/account"
+            className="hidden rounded-full border border-white/15 px-4 py-3 text-sm font-semibold text-white transition hover:border-cyan-300 hover:text-cyan-200 sm:inline-flex"
+          >
+            {currentUser ? 'Mein Konto' : 'Login'}
+          </Link>
+          <Link
+            href="/camps"
+            className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-[0_16px_35px_-22px_rgba(255,255,255,0.85)] transition hover:bg-slate-100"
+          >
+            Jetzt buchen
+          </Link>
+        </div>
       </div>
     </header>
   );

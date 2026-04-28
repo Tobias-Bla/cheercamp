@@ -1,6 +1,7 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
+import { getCurrentUser } from '@/lib/auth';
 import { getCampBySlug } from '@/lib/camps';
 import { getPrismaClient } from '@/lib/prisma';
 import { getStripeClient } from '@/lib/stripe';
@@ -9,7 +10,7 @@ import { bookingRequestSchema } from '@/lib/validations/booking';
 export async function POST(request: Request): Promise<Response> {
   try {
     const payload = bookingRequestSchema.parse(await request.json());
-    const camp = await getCampBySlug(payload.campSlug);
+    const [camp, currentUser] = await Promise.all([getCampBySlug(payload.campSlug), getCurrentUser()]);
 
     if (!camp) {
       return NextResponse.json({ error: 'Das ausgewählte Camp existiert nicht.' }, { status: 404 });
@@ -31,6 +32,7 @@ export async function POST(request: Request): Promise<Response> {
 
     const booking = await prisma.booking.create({
       data: {
+        userId: currentUser?.id ?? null,
         campSlug: camp.slug,
         campTitle: camp.title,
         campLocation: camp.location,
@@ -59,6 +61,28 @@ export async function POST(request: Request): Promise<Response> {
         currency: 'EUR',
       },
     });
+
+    if (currentUser) {
+      await prisma.user.update({
+        where: {
+          id: currentUser.id,
+        },
+        data: {
+          name: payload.contactName || null,
+          participantFirstName: payload.participantFirstName,
+          participantLastName: payload.participantLastName,
+          participantBirthDate: new Date(payload.participantBirthDate),
+          contactPhone: payload.contactPhone,
+          participantMobile: payload.participantMobile,
+          emergencyContactName: payload.emergencyContactName,
+          emergencyContactPhone: payload.emergencyContactPhone,
+          teamName: payload.teamName || null,
+          stuntPartnerOrGroup: payload.stuntPartnerOrGroup || null,
+          allergies: payload.allergies || null,
+          notes: payload.notes || null,
+        },
+      });
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
