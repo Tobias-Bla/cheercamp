@@ -35,7 +35,7 @@ function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
-function hashSessionToken(token: string): string {
+export function hashToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
 }
 
@@ -101,7 +101,7 @@ export async function verifyPassword(password: string, passwordHash: string): Pr
 
 export async function createUserSession(userId: string): Promise<void> {
   const token = randomBytes(32).toString('base64url');
-  const tokenHash = hashSessionToken(token);
+  const tokenHash = hashToken(token);
   const expiresAt = new Date(Date.now() + sessionDurationMs);
   const prisma = getPrismaClient();
 
@@ -131,7 +131,7 @@ export async function clearUserSession(): Promise<void> {
     const prisma = getPrismaClient();
     await prisma.userSession.deleteMany({
       where: {
-        tokenHash: hashSessionToken(token),
+        tokenHash: hashToken(token),
       },
     });
   }
@@ -150,7 +150,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   const prisma = getPrismaClient();
   const session = await prisma.userSession.findUnique({
     where: {
-      tokenHash: hashSessionToken(token),
+      tokenHash: hashToken(token),
     },
     include: {
       user: true,

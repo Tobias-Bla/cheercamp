@@ -194,5 +194,54 @@
     ],
     "featured": true,
     "bookingOpen": true
+  },
+  {
+    "slug": "testcamp",
+    "title": "testcamp",
+    "subtitle": "Testcamp fuer eine Live-Zahlung mit Stripe.",
+    "location": "St. Blasien",
+    "venue": "Albtalhalle, St. Blasien",
+    "startDate": null,
+    "endDate": null,
+    "dateLabel": "Testzahlung",
+    "priceCents": 50,
+    "capacity": 1,
+    "capacityText": "1 Testplatz",
+    "ages": "Test",
+    "level": "Test",
+    "coaches": ["Test"],
+    "coachModeLabel": "Test",
+    "formatOptions": ["Partnerstunt", "Groupstunt"],
+    "generalCampTime": "Testzahlung",
+    "overnightIncluded": false,
+    "privateAvailable": false,
+    "privatePaymentNote": "Dieses Camp dient nur zum Testen der Live-Zahlung.",
+    "coverImage": "/images/hero-group-photo.webp",
+    "coverImageAlt": "Testcamp Bild.",
+    "bookingImage": "/images/hero-group-photo.webp",
+    "bookingImageAlt": "Testcamp Bild.",
+    "gallery": [
+      {
+        "src": "/images/hero-group-photo.webp",
+        "alt": "Testcamp Bild."
+      }
+    ],
+    "privateOptions": [
+      {
+        "label": "Kein Private-Interesse",
+        "value": "NONE"
+      }
+    ],
+    "focus": ["Stripe Live-Test"],
+    "highlights": ["0,50 EUR Testzahlung"],
+    "schedule": [
+      {
+        "day": "Test",
+        "title": "Stripe Live-Test",
+        "details": ["Dieses Camp ist nur fuer eine kurze Live-Testzahlung gedacht."]
+      }
+    ],
+    "featured": false,
+    "bookingOpen": true
   }
 ]

@@ -9,9 +9,9 @@ export const dynamic = 'force-dynamic';
 export default async function AccountPage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; saved?: string }>;
+  searchParams: Promise<{ created?: string; saved?: string; passwordReset?: string }>;
 }) {
-  const [{ created, saved }, currentUser] = await Promise.all([searchParams, getCurrentUser()]);
+  const [{ created, saved, passwordReset }, currentUser] = await Promise.all([searchParams, getCurrentUser()]);
 
   if (!currentUser) {
     return (
@@ -80,6 +80,12 @@ export default async function AccountPage({
       {saved ? (
         <div className="mb-8 rounded-[2rem] border border-emerald-400/25 bg-emerald-400/10 px-6 py-4 text-sm text-emerald-100">
           Profil wurde gespeichert.
+        </div>
+      ) : null}
+
+      {passwordReset ? (
+        <div className="mb-8 rounded-[2rem] border border-emerald-400/25 bg-emerald-400/10 px-6 py-4 text-sm text-emerald-100">
+          Passwort wurde aktualisiert.
         </div>
       ) : null}
 

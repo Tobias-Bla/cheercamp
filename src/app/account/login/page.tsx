@@ -51,6 +51,12 @@ export default async function LoginPage({
         </form>
 
         <p className="mt-6 text-sm text-slate-300">
+          <Link href="/account/forgot-password" className="font-semibold text-cyan-300 transition hover:text-cyan-200">
+            Passwort vergessen?
+          </Link>
+        </p>
+
+        <p className="mt-3 text-sm text-slate-300">
           Noch kein Konto?{' '}
           <Link href="/account/register" className="font-semibold text-cyan-300 transition hover:text-cyan-200">
             Konto erstellen
