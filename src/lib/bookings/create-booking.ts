@@ -1,4 +1,5 @@
 import { ZodError } from 'zod';
+import { Prisma } from '@/generated/prisma';
 import { getCurrentUser } from '@/lib/auth';
 import { getCampBySlug } from '@/lib/camps';
 import { getPrismaClient } from '@/lib/prisma';
@@ -76,36 +77,53 @@ export async function createPendingBookingFromPayload(payloadJson: unknown) {
   const contactPhone = payload.contactPhone?.trim() || payload.participantMobile;
   const allergies = payload.allergies?.trim() || null;
 
-  const booking = await prisma.booking.create({
-    data: {
-      userId: currentUser?.id ?? null,
-      campSlug: camp.slug,
-      campTitle: camp.title,
-      campLocation: camp.location,
-      campStartDate: camp.startDate ? new Date(camp.startDate) : null,
-      campEndDate: camp.endDate ? new Date(camp.endDate) : null,
-      participantFirstName: payload.participantFirstName,
-      participantLastName: payload.participantLastName,
-      participantBirthDate: new Date(payload.participantBirthDate),
-      contactName: payload.contactName,
-      contactEmail: payload.contactEmail,
-      contactPhone,
-      emergencyContactName: payload.emergencyContactName,
-      emergencyContactPhone: payload.emergencyContactPhone,
-      experienceLevel: payload.experienceLevel,
-      stuntFormat: payload.stuntFormat,
-      teamName: payload.teamName || null,
-      stuntPartnerOrGroup: payload.stuntPartnerOrGroup || null,
-      participantMobile: payload.participantMobile,
-      saturdayWish: payload.saturdayWish || null,
-      privateInterest: payload.privateInterest,
-      allergies,
-      notes: payload.notes || null,
-      photoConsent: payload.photoConsent,
-      acceptedTerms: payload.acceptedTerms,
-      amountCents: camp.priceCents,
-      currency: 'EUR',
-    },
+  const booking = await prisma.$transaction(async (transaction) => {
+    await transaction.$executeRaw(Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${camp.slug}))`);
+
+    const reservedPlaces = await transaction.booking.count({
+      where: {
+        campSlug: camp.slug,
+        status: {
+          in: ['PENDING', 'PAID'],
+        },
+      },
+    });
+
+    if (reservedPlaces >= camp.capacity) {
+      throw new BookingRequestError('Das Camp ist leider ausgebucht.', 400);
+    }
+
+    return transaction.booking.create({
+      data: {
+        userId: currentUser?.id ?? null,
+        campSlug: camp.slug,
+        campTitle: camp.title,
+        campLocation: camp.location,
+        campStartDate: camp.startDate ? new Date(camp.startDate) : null,
+        campEndDate: camp.endDate ? new Date(camp.endDate) : null,
+        participantFirstName: payload.participantFirstName,
+        participantLastName: payload.participantLastName,
+        participantBirthDate: new Date(payload.participantBirthDate),
+        contactName: payload.contactName,
+        contactEmail: payload.contactEmail,
+        contactPhone,
+        emergencyContactName: payload.emergencyContactName,
+        emergencyContactPhone: payload.emergencyContactPhone,
+        experienceLevel: payload.experienceLevel,
+        stuntFormat: payload.stuntFormat,
+        teamName: payload.teamName || null,
+        stuntPartnerOrGroup: payload.stuntPartnerOrGroup || null,
+        participantMobile: payload.participantMobile,
+        saturdayWish: payload.saturdayWish || null,
+        privateInterest: payload.privateInterest,
+        allergies,
+        notes: payload.notes || null,
+        photoConsent: payload.photoConsent,
+        acceptedTerms: payload.acceptedTerms,
+        amountCents: camp.priceCents,
+        currency: 'EUR',
+      },
+    });
   });
 
   if (currentUser) {

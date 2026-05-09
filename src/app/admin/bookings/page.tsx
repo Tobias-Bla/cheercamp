@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getPrismaClient } from '@/lib/prisma';
 import { formatCurrency, formatDate } from '@/lib/format';
+import { markBookingPaidAction } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -124,6 +125,17 @@ export default async function AdminBookingsPage() {
                     {formatCurrency(booking.amountCents, booking.currency)}
                   </span>
                   <span className="rounded-full border border-white/10 px-3 py-1 text-xs">{formatDate(booking.createdAt)}</span>
+                  {booking.status === 'PENDING' ? (
+                    <form action={markBookingPaidAction}>
+                      <input type="hidden" name="bookingId" value={booking.id} />
+                      <button
+                        type="submit"
+                        className="rounded-full border border-emerald-300/35 bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-100 transition hover:bg-emerald-300/20"
+                      >
+                        PayPal gecheckt - bezahlt
+                      </button>
+                    </form>
+                  ) : null}
                 </div>
               </div>
 
