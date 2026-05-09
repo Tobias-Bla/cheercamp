@@ -3,11 +3,14 @@
 import { useState, type FormEvent } from 'react';
 import type { Camp } from '@/data/camps';
 import type { AccountProfile } from '@/lib/auth';
+import { formatEuroAmount, MANUAL_PAYPAL_ACCOUNT } from '@/lib/payment-options';
 
 type SubmitState = {
   error: string | null;
   loading: boolean;
 };
+
+type PaymentMethod = 'stripe' | 'paypal_manual';
 
 function getBooleanValue(formData: FormData, key: string): boolean {
   return formData.get(key) === 'on';
@@ -18,6 +21,7 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
     error: null,
     loading: false,
   });
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('stripe');
   const contactName =
     initialValues?.name ||
     [initialValues?.participantFirstName, initialValues?.participantLastName].filter(Boolean).join(' ');
@@ -49,7 +53,7 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
     };
 
     try {
-      const response = await fetch('/api/stripe/checkout', {
+      const response = await fetch(paymentMethod === 'stripe' ? '/api/stripe/checkout' : '/api/paypal/manual', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -213,8 +217,47 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
       </div>
 
       <div className="space-y-4 rounded-2xl border border-white/10 bg-slate-950/40 p-4 text-sm text-slate-300">
+        <div>
+          <p className="mb-3 text-sm font-medium text-slate-200">Zahlungsart</p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10">
+              <input
+                name="paymentMethod"
+                type="radio"
+                checked={paymentMethod === 'stripe'}
+                onChange={() => setPaymentMethod('stripe')}
+                className="mt-1 h-4 w-4 border-white/20 bg-slate-900"
+              />
+              <span>
+                <span className="block font-semibold text-white">Online bezahlen</span>
+                <span className="mt-1 block text-xs leading-5 text-slate-400">Direkte Weiterleitung zur sicheren Zahlung.</span>
+              </span>
+            </label>
+            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10">
+              <input
+                name="paymentMethod"
+                type="radio"
+                checked={paymentMethod === 'paypal_manual'}
+                onChange={() => setPaymentMethod('paypal_manual')}
+                className="mt-1 h-4 w-4 border-white/20 bg-slate-900"
+              />
+              <span>
+                <span className="block font-semibold text-white">PayPal manuell</span>
+                <span className="mt-1 block text-xs leading-5 text-slate-400">
+                  Danach {formatEuroAmount(camp.priceCents)} an {MANUAL_PAYPAL_ACCOUNT} senden.
+                </span>
+              </span>
+            </label>
+          </div>
+          {paymentMethod === 'paypal_manual' ? (
+            <p className="mt-3 text-xs leading-6 text-sky-100">
+              Bitte überweise mit Name und E-Mail im Verwendungszweck. Die Buchung wird als offen gespeichert,
+              bis die Zahlung zugeordnet wurde.
+            </p>
+          ) : null}
+        </div>
         <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-xs leading-6 text-slate-300">
-          Online bezahlt wird nur das General Camp. Privates am Sonntag werden separat organisiert und bar direkt an den Coach gezahlt.
+          Bezahlt wird nur das General Camp. Privates am Sonntag werden separat organisiert und bar direkt an den Coach gezahlt.
         </div>
         <label className="flex items-start gap-3">
           <input name="photoConsent" type="checkbox" className="mt-1 h-4 w-4 rounded border-white/20 bg-slate-900" />
@@ -241,7 +284,13 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
         disabled={submitState.loading}
         className="inline-flex w-full items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {submitState.loading ? 'Weiterleitung zu Stripe…' : 'General Camp kostenpflichtig buchen'}
+        {submitState.loading
+          ? paymentMethod === 'stripe'
+            ? 'Weiterleitung zur Zahlung...'
+            : 'PayPal-Hinweise werden vorbereitet...'
+          : paymentMethod === 'stripe'
+            ? 'General Camp kostenpflichtig buchen'
+            : 'Buchung vormerken und PayPal-Hinweise anzeigen'}
       </button>
     </form>
   );
