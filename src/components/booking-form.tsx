@@ -34,7 +34,6 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
       participantBirthDate: String(formData.get('participantBirthDate') ?? ''),
       contactName: String(formData.get('contactName') ?? ''),
       contactEmail: String(formData.get('contactEmail') ?? ''),
-      contactPhone: String(formData.get('contactPhone') ?? ''),
       emergencyContactName: String(formData.get('emergencyContactName') ?? ''),
       emergencyContactPhone: String(formData.get('emergencyContactPhone') ?? ''),
       experienceLevel: String(formData.get('experienceLevel') ?? ''),
@@ -44,7 +43,6 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
       participantMobile: String(formData.get('participantMobile') ?? ''),
       saturdayWish: String(formData.get('saturdayWish') ?? ''),
       privateInterest: String(formData.get('privateInterest') ?? 'NONE'),
-      allergies: String(formData.get('allergies') ?? ''),
       notes: String(formData.get('notes') ?? ''),
       photoConsent: getBooleanValue(formData, 'photoConsent'),
       acceptedTerms: getBooleanValue(formData, 'acceptedTerms'),
@@ -158,12 +156,6 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
           <input id="contactEmail" name="contactEmail" type="email" required defaultValue={initialValues?.email} className="field" />
         </div>
         <div>
-          <label htmlFor="contactPhone" className="mb-2 block text-sm font-medium text-slate-200">
-            Telefonnummer
-          </label>
-          <input id="contactPhone" name="contactPhone" required defaultValue={initialValues?.contactPhone} className="field" />
-        </div>
-        <div>
           <label htmlFor="participantMobile" className="mb-2 block text-sm font-medium text-slate-200">
             Handynummer Teilnehmer*in
           </label>
@@ -189,7 +181,7 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
       <div className="grid gap-5">
         <div>
           <label htmlFor="saturdayWish" className="mb-2 block text-sm font-medium text-slate-200">
-            Wünsche fürs Samstag-Camp
+            Wünsche fürs Samstag-Camp (optional)
           </label>
           <textarea
             id="saturdayWish"
@@ -213,14 +205,8 @@ export function BookingForm({ camp, initialValues }: { camp: Camp; initialValues
           <p className="mt-2 text-xs leading-6 text-slate-400">{camp.privatePaymentNote}</p>
         </div>
         <div>
-          <label htmlFor="allergies" className="mb-2 block text-sm font-medium text-slate-200">
-            Allergien / Unverträglichkeiten
-          </label>
-          <textarea id="allergies" name="allergies" rows={3} defaultValue={initialValues?.allergies} className="field min-h-28" />
-        </div>
-        <div>
           <label htmlFor="notes" className="mb-2 block text-sm font-medium text-slate-200">
-            Sonstige Hinweise
+            Sonstige Hinweise (optional)
           </label>
           <textarea id="notes" name="notes" rows={4} defaultValue={initialValues?.notes} className="field min-h-32" />
         </div>

@@ -15,7 +15,7 @@ export const bookingRequestSchema = z.object({
   participantBirthDate: z.string().refine(isIsoDate, 'Bitte ein gültiges Geburtsdatum angeben.'),
   contactName: z.string().trim().min(2).max(80),
   contactEmail: z.string().trim().email().max(120),
-  contactPhone: z.string().trim().min(6).max(30),
+  contactPhone: z.string().trim().min(6).max(30).optional(),
   emergencyContactName: z.string().trim().min(2).max(80),
   emergencyContactPhone: z.string().trim().min(6).max(30),
   experienceLevel: z.enum(experienceLevels),

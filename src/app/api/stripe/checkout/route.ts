@@ -1,11 +1,59 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
+import { ZodError } from 'zod';
 import { getCurrentUser } from '@/lib/auth';
 import { getCampBySlug } from '@/lib/camps';
 import { getPrismaClient } from '@/lib/prisma';
 import { getStripeClient } from '@/lib/stripe';
 import { bookingRequestSchema } from '@/lib/validations/booking';
+
+const fieldLabels: Record<string, string> = {
+  participantFirstName: 'den Vornamen',
+  participantLastName: 'den Nachnamen',
+  participantBirthDate: 'das Geburtsdatum',
+  contactName: 'den Namen der Kontaktperson',
+  contactEmail: 'eine gültige E-Mail-Adresse',
+  contactPhone: 'eine Telefonnummer',
+  emergencyContactName: 'den Namen des Notfallkontakts',
+  emergencyContactPhone: 'eine Telefonnummer für den Notfallkontakt',
+  participantMobile: 'eine Handynummer',
+  acceptedTerms: 'die Zustimmung zu Datenschutz und Buchungsbedingungen',
+};
+
+function formatBookingValidationError(error: ZodError): string {
+  const firstIssue = error.issues[0];
+
+  if (!firstIssue) {
+    return 'Bitte prüfe deine Eingaben.';
+  }
+
+  const field = firstIssue.path[0];
+
+  if (typeof field !== 'string') {
+    return 'Bitte prüfe deine Eingaben.';
+  }
+
+  const label = fieldLabels[field];
+
+  if (!label) {
+    return firstIssue.message || 'Bitte prüfe deine Eingaben.';
+  }
+
+  if (field === 'acceptedTerms') {
+    return 'Bitte stimme Datenschutz und Buchungsbedingungen zu.';
+  }
+
+  if (field === 'participantBirthDate') {
+    return 'Bitte gib ein gültiges Geburtsdatum an.';
+  }
+
+  if (field === 'contactEmail') {
+    return 'Bitte gib eine gültige E-Mail-Adresse an.';
+  }
+
+  return `Bitte gib ${label} an.`;
+}
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -29,6 +77,8 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const stripe = getStripeClient();
+    const contactPhone = payload.contactPhone?.trim() || payload.participantMobile;
+    const allergies = payload.allergies?.trim() || null;
 
     const booking = await prisma.booking.create({
       data: {
@@ -43,7 +93,7 @@ export async function POST(request: Request): Promise<Response> {
         participantBirthDate: new Date(payload.participantBirthDate),
         contactName: payload.contactName,
         contactEmail: payload.contactEmail,
-        contactPhone: payload.contactPhone,
+        contactPhone,
         emergencyContactName: payload.emergencyContactName,
         emergencyContactPhone: payload.emergencyContactPhone,
         experienceLevel: payload.experienceLevel,
@@ -53,7 +103,7 @@ export async function POST(request: Request): Promise<Response> {
         participantMobile: payload.participantMobile,
         saturdayWish: payload.saturdayWish || null,
         privateInterest: payload.privateInterest,
-        allergies: payload.allergies || null,
+        allergies,
         notes: payload.notes || null,
         photoConsent: payload.photoConsent,
         acceptedTerms: payload.acceptedTerms,
@@ -72,14 +122,14 @@ export async function POST(request: Request): Promise<Response> {
           participantFirstName: payload.participantFirstName,
           participantLastName: payload.participantLastName,
           participantBirthDate: new Date(payload.participantBirthDate),
-          contactPhone: payload.contactPhone,
           participantMobile: payload.participantMobile,
           emergencyContactName: payload.emergencyContactName,
           emergencyContactPhone: payload.emergencyContactPhone,
           teamName: payload.teamName || null,
           stuntPartnerOrGroup: payload.stuntPartnerOrGroup || null,
-          allergies: payload.allergies || null,
           notes: payload.notes || null,
+          ...(payload.contactPhone ? { contactPhone } : {}),
+          ...(payload.allergies !== undefined ? { allergies } : {}),
         },
       });
     }
@@ -126,6 +176,10 @@ export async function POST(request: Request): Promise<Response> {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ error: formatBookingValidationError(error) }, { status: 400 });
+    }
+
     const message = error instanceof Error ? error.message : 'Unbekannter Fehler';
     return NextResponse.json({ error: message }, { status: 400 });
   }
