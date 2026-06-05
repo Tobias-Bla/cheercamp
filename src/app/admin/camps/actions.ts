@@ -7,15 +7,15 @@ import { deleteCampFromFile, readCampsFromFile, updateCampInFile } from '@/lib/c
 
 const privateOptionLabels: Record<PrivateOption, string> = {
   NONE: 'Kein Private-Interesse',
-  PAIR_60: 'Pair Private · 60 Minuten',
-  PAIR_90: 'Pair Private · 90 Minuten',
-  GROUP_60: 'Groupstunt Private · 60 Minuten',
-  GROUP_90: 'Groupstunt Private · 90 Minuten',
-  INDIVIDUAL_60: 'Einzelperson Session · 60 Minuten',
-  INDIVIDUAL_90: 'Einzelperson Session · 90 Minuten',
+  PAIR_60: '1 on 1 - 60 Minuten mit Kai - 40,-€',
+  PAIR_90: '1 on 1 - 60 Minuten mit Vio - 40,-€',
+  GROUP_60: '2 on 1 - 60 Minuten mit Kai und Vio - 60,-€',
+  GROUP_90: '2 on 1 - 90 Minuten mit Kai und Vio - 80,-€',
+  INDIVIDUAL_60: 'Einzelperson Session - 60 Minuten',
+  INDIVIDUAL_90: 'Einzelperson Session - 90 Minuten',
 };
 
-const allPrivateOptions = Object.keys(privateOptionLabels) as PrivateOption[];
+const allPrivateOptions: PrivateOption[] = ['NONE', 'PAIR_60', 'PAIR_90', 'GROUP_60', 'GROUP_90'];
 
 function text(formData: FormData, name: string): string {
   return String(formData.get(name) ?? '').trim();

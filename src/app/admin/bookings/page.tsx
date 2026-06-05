@@ -30,10 +30,10 @@ const stuntFormatLabels = {
 
 const privateInterestLabels = {
   NONE: 'Kein Private',
-  PAIR_60: 'Pair Private 60 Min.',
-  PAIR_90: 'Pair Private 90 Min.',
-  GROUP_60: 'Groupstunt Private 60 Min.',
-  GROUP_90: 'Groupstunt Private 90 Min.',
+  PAIR_60: '1 on 1 - 60 Minuten mit Kai - 40,-€',
+  PAIR_90: '1 on 1 - 60 Minuten mit Vio - 40,-€',
+  GROUP_60: '2 on 1 - 60 Minuten mit Kai und Vio - 60,-€',
+  GROUP_90: '2 on 1 - 90 Minuten mit Kai und Vio - 80,-€',
   INDIVIDUAL_60: 'Einzelperson 60 Min.',
   INDIVIDUAL_90: 'Einzelperson 90 Min.',
 } as const;

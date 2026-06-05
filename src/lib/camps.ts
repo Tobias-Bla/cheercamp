@@ -42,6 +42,16 @@ export type AdminCamp = Camp & {
 };
 
 const internalCampSlugs = new Set(['testcamp']);
+const visiblePrivateOptions = new Set<PrivateOption>(['NONE', 'PAIR_60', 'PAIR_90', 'GROUP_60', 'GROUP_90']);
+const privateOptionLabels: Record<PrivateOption, string> = {
+  NONE: 'Kein Private-Interesse',
+  PAIR_60: '1 on 1 - 60 Minuten mit Kai - 40,-€',
+  PAIR_90: '1 on 1 - 60 Minuten mit Vio - 40,-€',
+  GROUP_60: '2 on 1 - 60 Minuten mit Kai und Vio - 60,-€',
+  GROUP_90: '2 on 1 - 90 Minuten mit Kai und Vio - 80,-€',
+  INDIVIDUAL_60: 'Einzelperson Session - 60 Minuten',
+  INDIVIDUAL_90: 'Einzelperson Session - 90 Minuten',
+};
 
 export function isPublicCamp(camp: Pick<Camp, 'slug'>): boolean {
   return !internalCampSlugs.has(camp.slug);
@@ -118,6 +128,15 @@ function jsonToSchedule(value: Prisma.JsonValue, fallback: Camp['schedule']): Ca
   return isScheduleArray(value) ? value : fallback;
 }
 
+function normalizePrivateOptions(options: Camp['privateOptions']): Camp['privateOptions'] {
+  return options
+    .filter((option) => visiblePrivateOptions.has(option.value))
+    .map((option) => ({
+      ...option,
+      label: privateOptionLabels[option.value],
+    }));
+}
+
 function normalizeGalleryImage(image: CampGalleryImage): CampGalleryImage {
   if (image.src.endsWith('/coach-kai-dog.webp')) {
     return {
@@ -168,7 +187,7 @@ function mapManagedCampRow(row: ManagedCampRow, fallback?: Camp): Camp {
     bookingImage: row.booking_image,
     bookingImageAlt,
     gallery: jsonToGallery(row.gallery, fallback?.gallery ?? []).map(normalizeGalleryImage),
-    privateOptions: jsonToPrivateOptions(row.private_options, fallback?.privateOptions ?? []),
+    privateOptions: normalizePrivateOptions(jsonToPrivateOptions(row.private_options, fallback?.privateOptions ?? [])),
     focus: jsonToStringArray(row.focus, fallback?.focus ?? []),
     highlights: jsonToStringArray(row.highlights, fallback?.highlights ?? []),
     schedule: jsonToSchedule(row.schedule, fallback?.schedule ?? []),
